@@ -46,15 +46,9 @@ variable "asvnsc_snet_name_fa" {
   default     = null
 }
 
-variable "asvnsc_snet_rg_name" {
-  type    = string
-  default = null
-}
+variable "asvnsc_snet_rg_name" {}
 
-variable "asvnsc_snet_vnet_name" {
-  type    = string
-  default = null
-}
+variable "asvnsc_snet_vnet_name" {}
 
 variable "mssqlvn_rules" {
   type = list(object({
