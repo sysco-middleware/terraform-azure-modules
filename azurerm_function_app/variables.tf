@@ -41,11 +41,6 @@ variable "connection_strings" {
     error_message = "The variable 'connection_strings' must have valid type: 'SQLAzure', 'SQLServer', 'Custom', .. ."
   }
 }
-variable "client_cert_enabled" {
-  type        = bool
-  description = "Does the App Service require client certificates for incoming requests? "
-  default     = false
-}
 variable "ftps_state" {
   type        = string
   description = "(Optional) State of FTP / FTPS service for this App Service. Possible values include: AllAllowed, FtpsOnly and Disabled. AppService log requires this to be activated."

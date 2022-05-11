@@ -25,7 +25,7 @@ variable "topics" {
 variable "queues" {
   type = list(object({
     name           = string
-    lock_duration  = string #  (Optional) The ISO 8601 timespan duration of a peek-lock; that is, the amount of time that the message is locked for other receivers. Maximum value is 5 minutes. Defaults to 1 minute (PT1M).
+    lock_duration  = string # (Optional) The ISO 8601 timespan duration of a peek-lock; that is, the amount of time that the message is locked for other receivers. Maximum value is 5 minutes. Defaults to 1 minute (PT1M).
     max_size_in_mb = number # (Optional) Integer value which controls the size of memory allocated for the queue. For supported values see the "Queue or topic size" section of Service Bus Quotas. Defaults to 1024
   }))
   description = "A list of Service bus queues"
