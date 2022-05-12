@@ -5,7 +5,7 @@ variable "enabled" {
 }
 variable "always_on" {
   type        = bool
-  description = "#(Optional) If this Windows Function App is Always On enabled. Defaults to true."
+  description = "(Optional) If this Windows Function App is Always On enabled. Defaults to true."
   default     = false
 }
 variable "name" {}
