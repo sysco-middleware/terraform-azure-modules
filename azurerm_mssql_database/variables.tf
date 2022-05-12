@@ -96,7 +96,7 @@ variable "backup_interval_in_hours" {
   description = "(Optional) The hours between each differential backup. This is only applicable to live databases but not dropped databases. Value has to be 12 or 24. Defaults to 12 hours."
   default     = 12
   validation {
-    condition = var.backup_interval_in_hours == 7 || var.backup_interval_in_hours == 35
+    condition = can(regex("12|24", var.backup_interval_in_hours))
     error_message = "Variable 'backup_interval_in_hours' must be either 12 (Default) or 24." 
   }
 }
