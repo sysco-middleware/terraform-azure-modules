@@ -4,7 +4,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "asvnsc_win_wa" 
   count      = length(local.asvnsc_win_apps_wa)
 
   app_service_id = data.azurerm_windows_web_app.win_wa[count.index].id #  (Required) The ID of the App Service or Function App to associate to the VNet. Changing this forces a new resource to be created.
-  subnet_id      = data.azurerm_subnet.asvnsc_snet_wa[0].id               #  (Required) The ID of the subnet the app service will be associated to (the subnet must have a service_delegation configured for Microsoft.Web/serverFarms).
+  subnet_id      = data.azurerm_subnet.asvnsc_snet_wa[0].id            #  (Required) The ID of the subnet the app service will be associated to (the subnet must have a service_delegation configured for Microsoft.Web/serverFarms).
 
   lifecycle {
     ignore_changes = [app_service_id]
@@ -16,7 +16,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "asvnsc_lin_wa" 
   count      = length(local.asvnsc_lin_apps_wa)
 
   app_service_id = data.azurerm_linux_web_app.lin_wa[count.index].id #  (Required) The ID of the App Service or Function App to associate to the VNet. Changing this forces a new resource to be created.
-  subnet_id      = data.azurerm_subnet.asvnsc_snet_wa[0].id             #  (Required) The ID of the subnet the app service will be associwin_ated to (the subnet must have a service_delegation configured for Microsoft.Web/serverFarms).
+  subnet_id      = data.azurerm_subnet.asvnsc_snet_wa[0].id          #  (Required) The ID of the subnet the app service will be associwin_ated to (the subnet must have a service_delegation configured for Microsoft.Web/serverFarms).
 
   lifecycle {
     ignore_changes = [app_service_id]
@@ -28,7 +28,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "asvnsc_win_fa" 
   count      = length(local.asvnsc_win_apps_fa)
 
   app_service_id = data.azurerm_windows_function_app.win_fa[count.index].id #  (Required) The ID of the App Service or Function App to associate to the VNet. Changing this forces a new resource to be created.
-  subnet_id      = data.azurerm_subnet.asvnsc_snet_fa[0].id                    #  (Required) The ID of the subnet the app service will be associated to (the subnet must have a service_delegation configured for Microsoft.Web/serverFarms).
+  subnet_id      = data.azurerm_subnet.asvnsc_snet_fa[0].id                 #  (Required) The ID of the subnet the app service will be associated to (the subnet must have a service_delegation configured for Microsoft.Web/serverFarms).
 
   lifecycle {
     ignore_changes = [app_service_id]
@@ -40,7 +40,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "asvnsc_lin_fa" 
   count      = length(local.asvnsc_lin_apps_fa)
 
   app_service_id = data.azurerm_linux_function_app.lin_fa[count.index].id #  (Required) The ID of the App Service or Function App to associate to the VNet. Changing this forces a new resource to be created.
-  subnet_id      = data.azurerm_subnet.asvnsc_snet_fa[0].id                  #  (Required) The ID of the subnet the app service will be associated to (the subnet must have a service_delegation configured for Microsoft.Web/serverFarms).
+  subnet_id      = data.azurerm_subnet.asvnsc_snet_fa[0].id               #  (Required) The ID of the subnet the app service will be associated to (the subnet must have a service_delegation configured for Microsoft.Web/serverFarms).
 
   lifecycle {
     ignore_changes = [app_service_id]

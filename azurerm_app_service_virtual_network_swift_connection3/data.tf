@@ -43,7 +43,7 @@ data "azurerm_resource_group" "asvnsc_snet_rg" {
 
 data "azurerm_subnet" "asvnsc_snet_wa" {
   depends_on = [data.azurerm_resource_group.asvnsc_snet_rg]
-  count      = var.asvnsc_snet_name_wa == null ? 0 : 1 
+  count      = var.asvnsc_snet_name_wa == null ? 0 : 1
 
   name                 = var.asvnsc_snet_name_wa
   virtual_network_name = var.asvnsc_snet_vnet_name

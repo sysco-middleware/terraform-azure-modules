@@ -61,9 +61,9 @@ resource "azurerm_servicebus_queue" "queue" {
 
   name                  = var.queues[count.index].name
   namespace_id          = azurerm_servicebus_namespace.sbns.id
-  lock_duration         = var.queues[count.index].lock_duration                    
-  max_size_in_megabytes = var.queues[count.index].max_size_in_mb                  
-  enable_partitioning   = local.enable_partitioning              # (Optional) Boolean flag which controls whether to enable the queue to be partitioned across multiple message brokers. Changing this forces a new resource to be created. Defaults to false for Basic and Standard. For Premium, it MUST be set to true.
+  lock_duration         = var.queues[count.index].lock_duration
+  max_size_in_megabytes = var.queues[count.index].max_size_in_mb
+  enable_partitioning   = local.enable_partitioning # (Optional) Boolean flag which controls whether to enable the queue to be partitioned across multiple message brokers. Changing this forces a new resource to be created. Defaults to false for Basic and Standard. For Premium, it MUST be set to true.
   #forward_to # (Optional) The name of a Queue or Topic to automatically forward messages to. Please see the documentation for more information.
   # forward_dead_lettered_messages_to - (Optional) The name of a Queue or Topic to automatically forward dead lettered messages to.
 

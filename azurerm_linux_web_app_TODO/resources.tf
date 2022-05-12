@@ -68,7 +68,7 @@ resource "azurerm_app_service" "wa" {
   logs {
     detailed_error_messages = var.logs.detailed_error_messages
     failed_request_tracing  = var.logs.failed_request_tracing
-    
+
     dynamic "application_logs" {
       for_each = var.application_logs.enabled ? [var.application_logs] : []
       iterator = each
