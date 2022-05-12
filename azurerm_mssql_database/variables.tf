@@ -1,5 +1,10 @@
 variable "rg_name" {}
 variable "kv_name" {}
+variable "lock_resource" {
+  type        = bool
+  description = "Adds lock level CanNotDelete to the resource"
+  default     = false
+}
 variable "sqlserver" {
   type = object({
     name             = string

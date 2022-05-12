@@ -9,7 +9,7 @@ variable "lock_level" {
   description = "(Required) Specifies the Level to be used for this Lock. Possible values are CanNotDelete and ReadOnly. Changing this forces a new resource to be created."
   validation {
     condition     = contains(["CanNotDelete", "ReadOnly"], var.lock_level)
-    error_message = "Variable \"app_kind\" must either be \"CanNotDelete\" or \"ReadOnly\"."
+    error_message = "Variable \"lock_level\" must either be \"CanNotDelete\" or \"ReadOnly\"."
   }
 }
 variable "notes" {
