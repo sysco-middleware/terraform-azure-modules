@@ -129,7 +129,7 @@ resource "azurerm_app_service" "wa" {
     min_tls_version           = "1.2"
     websockets_enabled        = false
     vnet_route_all_enabled    = var.vnet_route_all_enabled
-    http2_enabled             = true # (Optional) Specifies whether or not the http2 protocol should be enabled. Defaults to false
+    http2_enabled             = var.http2_enabled
     use_32_bit_worker_process = var.use_32_bit_worker_process
     scm_type                  = var.scm_type
     ftps_state                = var.ftps_state

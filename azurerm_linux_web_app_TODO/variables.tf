@@ -216,6 +216,11 @@ variable "https_only" {
   description = "Can the App Service only be accessed via HTTPS?"
   default     = true
 }
+variable "http2_enabled" {
+  type        = bool
+  description = "(Optional) Specifies if the http2 protocol should be enabled. Defaults to true."
+  default     = true
+}
 variable "health_check_path" {
   type        = string
   description = "(Optional) The health check path to be pinged by App Service. https://azure.github.io/AppService/2020/08/24/healthcheck-on-app-service.html"

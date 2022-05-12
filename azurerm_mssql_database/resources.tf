@@ -18,6 +18,7 @@ resource "azurerm_mssql_database" "db" {
 
   short_term_retention_policy {
     retention_days = var.pit_retention_days
+    backup_interval_in_hours = var.backup_interval_in_hours
   }
 
   long_term_retention_policy {

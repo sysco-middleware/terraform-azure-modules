@@ -83,8 +83,22 @@ variable "log_retension_days" {
 
 variable "pit_retention_days" {
   type        = number
-  description = "Point In Time Restore configuration. Value has to be between 7 and 35"
+  description = "Point In Time Restore configuration. Value has to be between 7 (Default) and 35"
   default     = 7
+  validation {
+    condition = var.pit_retention_days >= 7 && var.pit_retention_days <= 35
+    error_message = "Variable 'pit_retention_days' must be between 7 (Default) and 35." 
+  }
+}
+
+variable "backup_interval_in_hours" {
+  type        = number
+  description = "(Optional) The hours between each differential backup. This is only applicable to live databases but not dropped databases. Value has to be 12 or 24. Defaults to 12 hours."
+  default     = 12
+  validation {
+    condition = var.backup_interval_in_hours == 7 || var.backup_interval_in_hours == 35
+    error_message = "Variable 'backup_interval_in_hours' must be either 12 (Default) or 24." 
+  }
 }
 
 variable "auditing_enabled" {

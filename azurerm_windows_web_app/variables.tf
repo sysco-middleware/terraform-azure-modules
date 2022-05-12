@@ -170,8 +170,8 @@ variable "websockets_enabled" {
 }
 variable "http2_enabled" {
   type        = bool
-  description = "(Optional) Specifies if the http2 protocol should be enabled. Defaults to false."
-  default     = false
+  description = "(Optional) Specifies if the http2 protocol should be enabled. Defaults to true."
+  default     = true
 }
 variable "app_scale_limit" {
   type        = number
@@ -318,7 +318,7 @@ variable "app_insights" {
     instrumentation_key = string
     connection_string   = string
   })
-  description = "Aplication insights"
+  description = "Aplication insights settings"
   default = {
     enabled             = false
     instrumentation_key = null
