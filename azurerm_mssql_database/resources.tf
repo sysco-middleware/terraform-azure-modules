@@ -139,7 +139,7 @@ resource "azurerm_key_vault_secret" "kv_secret_db_pass" {
   }
 }
 
-resource "azurerm_management_lock" "umi_lock" {
+resource "azurerm_management_lock" "db_lock" {
   depends_on = [azurerm_mssql_database.db]
   count      = var.lock_resource ? 1 : 0
 
