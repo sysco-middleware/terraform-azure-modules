@@ -138,3 +138,13 @@ resource "azurerm_key_vault_secret" "kv_secret_db_pass" {
     ignore_changes = [key_vault_id]
   }
 }
+
+resource "azurerm_management_lock" "umi_lock" {
+  depends_on = [azurerm_mssql_database.db]
+  count      = var.lock_resource ? 1 : 0
+
+  name       = "CanNotDelete"
+  scope      = azurerm_mssql_database.db.id
+  lock_level = "CanNotDelete"
+  notes      = "Terraform: This prevents accidental deletion if this resource and sub resources"
+}
