@@ -11,7 +11,7 @@ resource "azurerm_mssql_database" "db" {
   sku_name             = var.sku_name
   geo_backup_enabled   = false # Not supported in Norway East
   zone_redundant       = false # Not supported in Norway East
-  storage_account_type = var.storage_account_type
+  storage_account_type = var.sa_type
   tags                 = var.tags
   elastic_pool_id      = var.elastic_pool_id
   #max_size_gb          = var.max_size_gb

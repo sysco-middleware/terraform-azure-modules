@@ -29,10 +29,20 @@ variable "databases" {
   sensitive   = true
 }
 variable "sa_name" {}
+variable "sa_type" {
+  type        = string
+  description = "Specifies the storage account type used to store backups for this database. Changing this forces a new resource to be created."
+  default     = "Geo"
+  validation {
+    condition     = can(regex("Local|Geo|GeoZone|Zone", var.sa_type))
+    error_message = "Variable 'sa_type' must be Local, Geo (Default), GeoZone or Zone."
+  }
+}
+
 variable "sku_name" {
   type        = string
   description = "Specifies the name of the sku used by the database. Only changing this from tier Hyperscale to another tier will force a new resource to be created"
-  default     = "S0" # BC_Gen5_2
+  default     = "S0" # az sql db list-editions -l norwayeast -o table
 }
 
 variable "collation" {
@@ -57,16 +67,6 @@ variable "geo_backup_enabled" {
   type        = bool
   description = "A boolean that specifies if the Geo Backup Policy is enabled."
   default     = true
-}
-
-variable "storage_account_type" {
-  type        = string
-  description = "Specifies the storage account type used to store backups for this database. Changing this forces a new resource to be created."
-  default     = "Geo"
-  validation {
-    condition     = can(regex("Local|Geo|Zone", var.storage_account_type))
-    error_message = "Variable 'storage_account_type' must be Local, Geo (Default) or Zone."
-  }
 }
 
 variable "tdal_retention_days" {
