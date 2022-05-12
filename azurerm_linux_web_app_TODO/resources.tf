@@ -1,4 +1,4 @@
-# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app
 resource "azurerm_app_service" "wa" {
   depends_on = [
     data.azurerm_resource_group.rg,
@@ -66,6 +66,9 @@ resource "azurerm_app_service" "wa" {
   }
 
   logs {
+    detailed_error_messages = var.logs.detailed_error_messages
+    failed_request_tracing  = var.logs.failed_request_tracing
+    
     dynamic "application_logs" {
       for_each = var.application_logs.enabled ? [var.application_logs] : []
       iterator = each

@@ -195,6 +195,18 @@ variable "worker_count" {
   default     = 2
 }
 
+variable "logs" {
+  type = object({
+    detailed_error_messages = bool # (Optional) Should detailed error messages be enabled.
+    failed_request_tracing  = bool # (Optional) Should tracing be enabled for failed requests.
+  })
+  description = "(Optional) Overall log settings"
+  default = {
+    detailed_error_messages = false
+    failed_request_tracing  = false
+  }
+}
+
 variable "application_logs" {
   type = object({
     enabled = bool
