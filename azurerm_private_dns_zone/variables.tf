@@ -15,7 +15,7 @@ variable "email_contact" {
 variable "ttl" {
   type        = number
   description = "(Optional) The Time To Live of the SOA Record in seconds. Defaults to 3600"
-  default     = 360
+  default     = 3600
 }
 variable "vnet_enabled" {
   type        = bool
@@ -67,9 +67,4 @@ variable "dns_txt_records" {
   }))
   description = "(Required) The name of the DNS TXT Record, Time To Live (TTL) and the value of the TXT record ( Max length: 1024 characters)."
   default     = []
-}
-variable "tags" {
-  type        = map(any)
-  description = "A mapping of tags to assign to the resource."
-  default     = {}
 }

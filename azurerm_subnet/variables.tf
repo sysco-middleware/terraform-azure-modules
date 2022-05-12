@@ -7,8 +7,8 @@ variable "subnets" {
     name       = string
     cidr       = list(string)
     tags       = list(string)
-    endpoints  = list(string)
-    delegation = list(string)
+    endpoints  = list(string) # Endpoints are services that can connect to the Subnet
+    delegation = list(string) # The service that can be installed in the Subnet
   }))
   description = "Subnet names, cidr prefixes, service endpoints and subnet deligation"
 }

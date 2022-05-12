@@ -207,7 +207,7 @@ variable "dotnet_version" {
 
 variable "runtime_version" {
   type        = string
-  description = "(Optional) The runtime version associated with the Function App. Defaults to ~4.."
+  description = "(Optional) The runtime version associated with the Function App. Defaults to ~3.."
   default     = "~3"
   validation {
     condition     = contains(["~3", "~4"], var.runtime_version)

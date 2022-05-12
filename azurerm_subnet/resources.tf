@@ -30,7 +30,7 @@ resource "azurerm_subnet" "snet" {
   }
 
   lifecycle {
-    ignore_changes = [name]
+    ignore_changes = [name, service_endpoints]
   }
 
   /*
