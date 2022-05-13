@@ -7,7 +7,7 @@ locals {
     WEBSITE_ENABLE_SYNC_UPDATE_SITE = true
     WEBSITE_TIME_ZONE               = var.time_zone
   }
-  app_settings = var.app_insights.enabled ? {
+  appsettings_appinsights = var.app_insights.enabled ? {
     APPINSIGHTS_INSTRUMENTATIONKEY             = var.app_insights.instrumentation_key
     APPLICATIONINSIGHTS_CONNECTION_STRING      = var.app_insights.connection_string
     ApplicationInsightsAgent_EXTENSION_VERSION = "~2"

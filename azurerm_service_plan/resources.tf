@@ -15,7 +15,7 @@ resource "azurerm_service_plan" "sp" {
   tags                   = var.tags
 
   lifecycle {
-    ignore_changes        = [tags, location, zone_balancing_enabled]
+    ignore_changes = [tags, location, zone_balancing_enabled]
     #create_before_destroy = true
   }
 }
