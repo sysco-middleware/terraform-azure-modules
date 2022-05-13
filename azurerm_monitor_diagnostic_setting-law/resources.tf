@@ -50,7 +50,7 @@ resource "azurerm_monitor_diagnostic_setting" "mds" {
     }
   }
 
-  lifecycle {
-    ignore_changes = [target_resource_id, log_analytics_workspace_id]
-  }
+  #lifecycle {
+  #  ignore_changes = [target_resource_id, log_analytics_workspace_id]
+  #}
 }
