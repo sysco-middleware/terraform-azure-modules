@@ -144,7 +144,7 @@ resource "azurerm_management_lock" "db_lock" {
   count      = var.lock_resource ? 1 : 0
 
   name       = "CanNotDelete"
-  scope      = azurerm_mssql_database.db.id
+  scope      = azurerm_mssql_database.db[0].id
   lock_level = "CanNotDelete"
   notes      = "Terraform: This prevents accidental deletion if this resource and sub resources"
 }
