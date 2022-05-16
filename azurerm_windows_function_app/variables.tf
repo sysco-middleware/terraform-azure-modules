@@ -95,16 +95,6 @@ variable "cors" {
     support_credentials = true
   }
 }
-variable "application_insights_connection_string" {
-  type        = string
-  description = "(Optional) The Connection String for linking the Windows Function App to Application Insights."
-  default     = null
-}
-variable "application_insights_key" {
-  type        = string
-  description = "(Optional) The Instrumentation Key for connecting the Windows Function App to Application Insights."
-  default     = null
-}
 variable "client_certificate_enabled" {
   type        = bool
   description = " (Optional) Should the function app use Client Certificates."
@@ -252,8 +242,8 @@ variable "app_settings" {
 variable "app_insights" {
   type = object({
     enabled             = bool
-    instrumentation_key = string
-    connection_string   = string
+    instrumentation_key = string # (Optional) The Instrumentation Key for connecting the Windows Function App to Application Insights.
+    connection_string   = string # (Optional) The Connection String for linking the Windows Function App to Application Insights.
   })
   description = "Aplication insights"
   default = {
@@ -298,7 +288,7 @@ variable "use_32_bit_worker" {
 variable "time_zone" {
   type        = string
   description = "The function app time zone. https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones?view=windows-11"
-  default     = "W. Europe Standard Time"
+  default     = "Central Europe Standard Time"
 }
 variable "tags" {
   type        = map(any)

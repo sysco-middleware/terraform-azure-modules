@@ -86,8 +86,8 @@ resource "azurerm_windows_function_app" "wfa" {
     # TODO: app_command_line - (Optional) App command line to launch, e.g. /sbin/myserver -b 0.0.0.0.
 
     app_scale_limit                        = var.app_scale_limit
-    application_insights_connection_string = var.application_insights_connection_string
-    application_insights_key               = var.application_insights_key
+    application_insights_connection_string = var.app_insights.enabled ? var.app_insights.connection_string : null
+    application_insights_key               = var.app_insights.enabled ? var.app_insights.instrumentation_key : null
 
     #Cross-Origin Resource Sharing (CORS) allows JavaScript code running in a browser on an external host to interact with your backend. Specify the origins that should be allowed to make cross-origin calls (for example: http://example.com:12345). To allow all, use "*" and remove all other origins from the list. 
     #Slashes are not allowed as part of domain or after TLD. Learn more

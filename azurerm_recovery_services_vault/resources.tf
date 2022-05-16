@@ -12,7 +12,7 @@ resource "azurerm_backup_policy_file_share" "policy" {
   resource_group_name = data.azurerm_resource_group.rg.name
   recovery_vault_name = azurerm_recovery_services_vault.rsv.name
 
-  timezone = "W. Europe Standard Time"
+  timezone = "Central Europe Standard Time"
 
   backup {
     frequency = "Daily"

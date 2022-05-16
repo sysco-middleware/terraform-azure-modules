@@ -143,7 +143,7 @@ variable "timezone" {
   # https://jackstromberg.com/2017/01/list-of-time-zones-consumed-by-azure/
   type        = string
   description = "(Optional) Specifies the time zone of the virtual machine"
-  default     = "W. Europe Standard Time"
+  default     = "Central Europe Standard Time"
 }
 variable "sa_endpoint" {
   type        = string
