@@ -192,6 +192,21 @@ variable "app_command_line" {
   description = "App service command line"
   default     = null # dotnet myfunc.dll
 }
+variable "default_documents" {
+  type        = list(string)
+  description = "Default documents"
+  default = [
+    "Default.htm",
+    "Default.html",
+    "Default.asp",
+    "index.htm",
+    "index.html",
+    "iisstart.htm",
+    "default.aspx",
+    "index.php",
+    "hostingstart.html"
+  ]
+}
 variable "client_affinity_enabled" {
   type        = bool
   description = "Should the App Service send session affinity cookies, which route client requests in the same session to the same instance? Disable for performance"

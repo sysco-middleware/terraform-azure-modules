@@ -81,8 +81,8 @@ resource "azurerm_linux_function_app" "lfa" {
     # TODO: app_command_line - (Optional) App command line to launch, e.g. /sbin/myserver -b 0.0.0.0.
 
     app_scale_limit                        = var.app_scale_limit
-    application_insights_connection_string = var.application_insights_connection_string
-    application_insights_key               = var.application_insights_key
+    application_insights_connection_string = var.app_insights.enabled ? var.app_insights.connection_string : null
+    application_insights_key               = var.app_insights.enabled ? var.app_insights.instrumentation_key : null
 
     #cors {
     #  allowed_origins     = ["*"] # A list of origins which should be able to make cross-origin calls

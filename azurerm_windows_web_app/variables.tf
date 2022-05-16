@@ -195,6 +195,22 @@ variable "worker_count" {
   default     = 2
 }
 
+variable "default_documents" {
+  type        = list(string)
+  description = "Default documents"
+  default = [
+    "Default.htm",
+    "Default.html",
+    "Default.asp",
+    "index.htm",
+    "index.html",
+    "iisstart.htm",
+    "default.aspx",
+    "index.php",
+    "hostingstart.html"
+  ]
+}
+
 variable "logs" {
   type = object({
     detailed_error_messages = bool # (Optional) Should detailed error messages be enabled.
@@ -399,3 +415,4 @@ variable "tags" {
   description = "A mapping of tags to assign to the resource."
   default     = {}
 }
+

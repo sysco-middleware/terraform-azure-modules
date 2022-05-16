@@ -34,4 +34,5 @@ locals {
     ApplicationInsightsAgent_EXTENSION_VERSION = "~2"
   } : {}
   app_settings = merge(local.appsettings_default, local.appsettings_appinsights, var.app_settings)
+  default_documents = sort(var.default_documents)
 }

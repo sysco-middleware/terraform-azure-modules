@@ -145,7 +145,7 @@ resource "azurerm_windows_web_app" "wwa" {
 
     application_stack {
       current_stack          = var.current_stack
-      dotnet_version         = local.dotnet_version
+      dotnet_version         = var.current_stack == "dotnetcore" ? "v3.0" : local.dotnet_version
       java_container         = local.java_container
       java_container_version = local.java_container_version
       java_version           = local.java_version

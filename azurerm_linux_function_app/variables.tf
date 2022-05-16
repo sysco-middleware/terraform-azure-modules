@@ -69,8 +69,8 @@ variable "backup" {
 variable "app_insights" {
   type = object({
     enabled             = bool
-    instrumentation_key = string
-    connection_string   = string
+    instrumentation_key = string # (Optional) The Instrumentation Key for connecting the Linux Function App to Application Insights.
+    connection_string   = string # (Optional) The Connection String for linking the Linux Function App to Application Insights.
   })
   description = "Aplication insights"
   default = {
