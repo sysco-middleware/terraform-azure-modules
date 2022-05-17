@@ -12,7 +12,7 @@ variable "sku_name" {
 }
 variable "idle_timeout_in_minutes" {
   type        = number
-  description = "(Optional) The idle timeout which should be used in minutes. Defaults to 4."
+  description = "(Optional) The idle timeout which should be used in minutes. Defaults to 10."
   default     = 10
 }
 variable "zones" {

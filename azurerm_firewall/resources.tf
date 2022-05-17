@@ -18,12 +18,14 @@ resource "azurerm_firewall" "fw" {
     public_ip_address_id = var.pipa_id
   }
 
-  management_ip_configuration {
-    for_each = var.pipa_id_mgmt == null ? [1] : []
+  dynamic "management_ip_configuration" {
+    for_each = var.pipa_id_mgmt != null ? [1] : []
 
-    name                 = "mgnt ip configuration"
-    subnet_id            = data.azurerm_subnet.snet_mgnt.id
-    public_ip_address_id = var.pipa_id_mgmt
+    content {
+      name                 = "mgnt ip configuration"
+      subnet_id            = data.azurerm_subnet.snet_mgnt[0].id
+      public_ip_address_id = var.pipa_id_mgmt
+    }
   }
 }
 
