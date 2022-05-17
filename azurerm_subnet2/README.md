@@ -63,5 +63,6 @@ NGINX.NGINXPLUS.nginxDeployments
 
 #####
 
+https://stackoverflow.com/questions/58594506/how-to-for-each-through-a-listobjects-in-terraform-0-12
 https://stackoverflow.com/questions/56372089/issues-with-iterating-over-list-or-set-of-elements-in-terraform
 An advantage of using for_each once it is implemented (aside from brevity) is that it will also tell Terraform to identify individual instances of this resource by the subnet id string, rather than by position in the list. That means that adding new subnets in future won't cause later instances to be "offset" and needlessly recreated, as would be true with my original example above.
