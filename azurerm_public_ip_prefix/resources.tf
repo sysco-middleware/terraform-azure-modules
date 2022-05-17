@@ -12,11 +12,11 @@ resource "azurerm_public_ip_prefix" "pipp" {
   tags                = var.tags
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location, ip_version, zones]
+    ignore_changes = [tags, location, ip_version, zones]
   }
 }
 
-resource "azurerm_management_lock" "pipa_lock" {
+resource "azurerm_management_lock" "pipp_lock" {
   depends_on = [azurerm_public_ip_prefix.pipp]
   count      = var.lock_resource ? 1 : 0
 

@@ -1,6 +1,6 @@
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/firewall
 resource "azurerm_firewall" "fw" {
-  depends_on = [data.azurerm_subnet.snet_fw]
+  depends_on = [data.azurerm_subnet.snet_fw, data.azurerm_subnet.snet_mgnt]
 
   name                = var.name
   resource_group_name = data.azurerm_resource_group.rg.name
@@ -14,14 +14,16 @@ resource "azurerm_firewall" "fw" {
 
   ip_configuration {
     name = "ip configuration"
-    # The Subnet used for the Firewall must have the name AzureFirewallSubnet and the subnet mask must be at least a /26.
     subnet_id            = data.azurerm_subnet.snet_fw.id
-    public_ip_address_id = data.azurerm_public_ip.pipa.id # The Public IP must have a Static allocation and Standard sku.
+    public_ip_address_id = var.pipa_id
   }
+  
   management_ip_configuration {
+    for_each = var.pipa_id_mgmt == null ? [1] : []
+
     name                 = "mgnt ip configuration"
     subnet_id            = data.azurerm_subnet.snet_mgnt.id
-    public_ip_address_id = data.azurerm_public_ip.pipa.id # The Public IP must have a Static allocation and Standard sku.
+    public_ip_address_id = var.pipa_id_mgmt
   }
 }
 

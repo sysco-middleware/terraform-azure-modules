@@ -1,7 +1,17 @@
 variable "name" {}
-variable "vnet_name" {}
 variable "rg_name" {}
-variable "pipa_name" {}
+variable "vnet_rg_name" {}
+
+variable "pipa_id" {
+  type = string
+  description = "The Public IP must have a Static allocation and Standard sku."
+}
+
+variable "pipa_id_mgmt" {
+  type = string
+  description = "The Public IP must have a Static allocation and Standard sku."
+  default = null
+}
 
 variable "sku_name" {
   type        = string
