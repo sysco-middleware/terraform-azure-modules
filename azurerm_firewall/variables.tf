@@ -1,6 +1,8 @@
 variable "name" {}
 variable "vnet_name" {}
 variable "rg_name" {}
+variable "pipa_name" {}
+
 variable "sku_name" {
   type        = string
   description = "(Optional) Sku name of the Firewall. Possible values are AZFW_Hub and AZFW_VNet. Changing this forces a new resource to be created."
@@ -31,13 +33,18 @@ variable "snet_fw_name" {
 variable "snet_mgnt_name" {
   type        = string
   description = "The Subnet used for the Firewall must have the name AzureFirewallSAzureFirewallManagementSubnet ubnet and the subnet mask must be at least a /26."
-  default     = "AzureFirewallManagementSubnet "
+  default     = "AzureFirewallManagementSubnet"
   validation {
-    condition     = try(var.snet_mgnt_name == "AzureFirewallManagementSubnet ")
+    condition     = try(var.snet_mgnt_name == "AzureFirewallManagementSubnet")
     error_message = "The snet_name variable for the Firewall must have the name AzureFirewallManagementSubnet."
   }
 }
-variable "pipa_name" {}
+
+variable "firewall_policy_id" {
+  type        = string
+  description = "(Optional) The ID of the Firewall Policy applied to this Firewall."
+  default     = null
+}
 variable "tags" {
   type        = map(any)
   description = "A mapping of tags to assign to the resource."

@@ -9,8 +9,8 @@ resource "azurerm_private_endpoint" "pe" {
   tags                = var.tags
 
   private_dns_zone_group {
-    name = var.pdzg_name
-    private_dns_zone_ids = var.pdzg_list 
+    name                 = var.pdzg_name
+    private_dns_zone_ids = var.pdzg_list
   }
 
   private_service_connection {

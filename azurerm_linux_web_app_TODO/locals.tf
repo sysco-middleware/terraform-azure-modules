@@ -3,7 +3,6 @@ locals {
   start_time          = formatdate("YYYY-MM-DD hh:mm:ss", timestamp())
   created_datetimeUTC = formatdate("YYYY-MM-DD hh:mm:ss ZZZ", timestamp())
 
-  default_documents = sort(["index.html", "index.js", "default.html", "default.aspx", "hostingstart.htm", "iisstart.htm"])
   #  linux_fx_version = "DOTNETCORE|3.1"
   app_kinds = {
     "windows" = {
@@ -33,6 +32,6 @@ locals {
     APPLICATIONINSIGHTS_CONNECTION_STRING      = var.app_insights.connection_string
     ApplicationInsightsAgent_EXTENSION_VERSION = "~2"
   } : {}
-  app_settings = merge(local.appsettings_default, local.appsettings_appinsights, var.app_settings)
+  app_settings      = merge(local.appsettings_default, local.appsettings_appinsights, var.app_settings)
   default_documents = sort(var.default_documents)
 }

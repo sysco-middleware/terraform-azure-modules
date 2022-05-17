@@ -15,7 +15,7 @@ locals {
   app_settings = merge(local.appsettings_default, local.appsettings_appinsights, var.app_settings)
 
   default_documents = sort(var.default_documents)
-  identity_ids = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? toset(var.managed_identity_ids) : null
+  identity_ids      = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? toset(var.managed_identity_ids) : null
 
   dotnet_version         = can(regex("dotnet", var.current_stack)) ? var.dotnet_version : null
   java_container         = can(regex("java", var.current_stack)) ? var.java_container : null
