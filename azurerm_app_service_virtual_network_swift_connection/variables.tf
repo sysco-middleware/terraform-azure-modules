@@ -1,4 +1,4 @@
-variable "asvnsc_apps_wa" {
+variable "asvnsc_win_apps_wa" {
   type = list(object({
     name    = string
     rg_name = string
@@ -7,7 +7,7 @@ variable "asvnsc_apps_wa" {
   default     = []
 }
 
-variable "asvnsc_apps_fa" {
+variable "asvnsc_win_apps_fa" {
   type = list(object({
     name    = string
     rg_name = string
@@ -16,19 +16,39 @@ variable "asvnsc_apps_fa" {
   default     = []
 }
 
-variable "asvnsc_snet_name" {
+variable "asvnsc_lin_apps_wa" {
+  type = list(object({
+    name    = string
+    rg_name = string
+  }))
+  description = "Enables app_service_virtual_network_swift_connection for App Service"
+  default     = []
+}
+
+variable "asvnsc_lin_apps_fa" {
+  type = list(object({
+    name    = string
+    rg_name = string
+  }))
+  description = "Enables app_service_virtual_network_swift_connection for Function app"
+  default     = []
+}
+
+variable "asvnsc_snet_name_wa" {
   type        = string
-  description = "The name of the Subnet"
+  description = "The name of the Web App Subnet"
   default     = null
 }
-variable "asvnsc_snet_rg_name" {
-  type    = string
-  default = null
+
+variable "asvnsc_snet_name_fa" {
+  type        = string
+  description = "The name of the Function App Subnet"
+  default     = null
 }
-variable "asvnsc_snet_vnet_name" {
-  type    = string
-  default = null
-}
+
+variable "asvnsc_snet_rg_name" {}
+
+variable "asvnsc_snet_vnet_name" {}
 
 variable "mssqlvn_rules" {
   type = list(object({

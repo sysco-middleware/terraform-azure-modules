@@ -3,7 +3,7 @@
 resource "azurerm_subnet" "snet" {
   depends_on = [data.azurerm_virtual_network.vnet]
   for_each   = { for item in var.subnets : item.name => item }
-  
+
   name                                           = each.value.name
   resource_group_name                            = data.azurerm_resource_group.rg.name
   virtual_network_name                           = data.azurerm_virtual_network.vnet.name

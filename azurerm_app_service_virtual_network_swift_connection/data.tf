@@ -3,34 +3,35 @@ data "azurerm_client_config" "current" {}
 ###################################################
 ############### WEB APP
 
-data "azurerm_resource_group" "wa_rg" {
-  count = length(var.asvnsc_apps_wa)
+data "azurerm_windows_web_app" "win_wa" {
+  count = length(local.asvnsc_win_apps_wa)
 
-  name = var.asvnsc_apps_wa[count.index].rg_name
+  name                = local.asvnsc_win_apps_wa[count.index].name
+  resource_group_name = local.asvnsc_win_apps_wa[count.index].rg_name
 }
-data "azurerm_windows_web_app" "wa" {
-  depends_on = [data.azurerm_resource_group.wa_rg]
-  count      = length(var.asvnsc_apps_wa)
 
-  name                = var.asvnsc_apps_wa[count.index].name
-  resource_group_name = var.asvnsc_apps_wa[count.index].rg_name
+data "azurerm_linux_web_app" "lin_wa" {
+  count = length(local.asvnsc_lin_apps_wa)
+
+  name                = local.asvnsc_lin_apps_wa[count.index].name
+  resource_group_name = local.asvnsc_lin_apps_wa[count.index].rg_name
 }
 
 ###################################################
 ############### FUNCTION APP
 
-data "azurerm_resource_group" "fa_rg" {
-  count = length(var.asvnsc_apps_fa)
+data "azurerm_windows_function_app" "win_fa" {
+  count = length(local.asvnsc_win_apps_fa)
 
-  name = var.asvnsc_apps_fa[count.index].rg_name
+  name                = local.asvnsc_win_apps_fa[count.index].name
+  resource_group_name = local.asvnsc_win_apps_fa[count.index].rg_name
 }
 
-data "azurerm_windows_function_app" "fa" {
-  depends_on = [data.azurerm_resource_group.fa_rg]
-  count      = length(var.asvnsc_apps_fa)
+data "azurerm_linux_function_app" "lin_fa" {
+  count = length(local.asvnsc_lin_apps_fa)
 
-  name                = var.asvnsc_apps_fa[count.index].name
-  resource_group_name = var.asvnsc_apps_fa[count.index].rg_name
+  name                = local.asvnsc_lin_apps_fa[count.index].name
+  resource_group_name = local.asvnsc_lin_apps_fa[count.index].rg_name
 }
 
 ###################################################
@@ -39,10 +40,21 @@ data "azurerm_windows_function_app" "fa" {
 data "azurerm_resource_group" "asvnsc_snet_rg" {
   name = var.asvnsc_snet_rg_name
 }
-data "azurerm_subnet" "asvnsc_snet" {
-  depends_on = [data.azurerm_resource_group.asvnsc_snet_rg]
 
-  name                 = var.asvnsc_snet_name
+data "azurerm_subnet" "asvnsc_snet_wa" {
+  depends_on = [data.azurerm_resource_group.asvnsc_snet_rg]
+  count      = var.asvnsc_snet_name_wa == null ? 0 : 1
+
+  name                 = var.asvnsc_snet_name_wa
+  virtual_network_name = var.asvnsc_snet_vnet_name
+  resource_group_name  = var.asvnsc_snet_rg_name
+}
+
+data "azurerm_subnet" "asvnsc_snet_fa" {
+  depends_on = [data.azurerm_resource_group.asvnsc_snet_rg]
+  count      = var.asvnsc_snet_name_fa == null ? 0 : 1
+
+  name                 = var.asvnsc_snet_name_fa
   virtual_network_name = var.asvnsc_snet_vnet_name
   resource_group_name  = var.asvnsc_snet_rg_name
 }
@@ -65,7 +77,7 @@ data "azurerm_mssql_server" "sql" {
 }
 
 ###################################################
-############### SUBNET for sql
+############### SUBNET for SQL
 
 data "azurerm_resource_group" "mssqlvn_snet_rg" {
   count = var.mssqlvn_snet_rg_name == null ? 0 : 1
