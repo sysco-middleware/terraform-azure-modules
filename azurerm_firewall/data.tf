@@ -10,6 +10,14 @@ data "azurerm_virtual_network" "vnet" {
   resource_group_name = var.rg_name
 }
 
+data "azurerm_subnet" "snet_fw" {
+  depends_on = [data.azurerm_resource_group.rg]
+
+  name                 = var.snet_fw_name
+  virtual_network_name = var.vnet_name
+  resource_group_name  = var.rg_name
+}
+
 data "azurerm_subnet" "snet_mgnt" {
   depends_on = [data.azurerm_resource_group.rg]
 
@@ -17,6 +25,7 @@ data "azurerm_subnet" "snet_mgnt" {
   virtual_network_name = var.vnet_name
   resource_group_name  = var.rg_name
 }
+
 
 data "azurerm_firewall" "fw" {
   depends_on = [azurerm_firewall.fw]

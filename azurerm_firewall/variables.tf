@@ -3,14 +3,14 @@ variable "rg_name" {}
 variable "vnet_name" {}
 
 variable "pipa_id" {
-  type = string
+  type        = string
   description = "The Public IP must have a Static allocation and Standard sku."
 }
 
 variable "pipa_id_mgmt" {
-  type = string
+  type        = string
   description = "The Public IP must have a Static allocation and Standard sku."
-  default = null
+  default     = null
 }
 
 variable "sku_name" {
@@ -22,6 +22,7 @@ variable "sku_name" {
     error_message = "Variable \"sku_name\" must either be \"AZFW_Hub\" or \"AZFW_VNet\"."
   }
 }
+
 variable "sku_tier" {
   type        = string
   description = "(Optional) Sku tier of the Firewall. Possible values are Premium and Standard. Changing this forces a new resource to be created"
@@ -31,6 +32,13 @@ variable "sku_tier" {
     error_message = "Variable \"sku_name\" must either be \"Standard\" or \"Premium\"."
   }
 }
+
+variable "dns_servers" {
+  type        = string
+  description = "DNS servers"
+  default     = []
+}
+
 variable "snet_fw_name" {
   type        = string
   description = "The Subnet used for the Firewall must have the name AzureFirewallSubnet and the subnet mask must be at least a /26."

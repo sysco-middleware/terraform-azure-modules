@@ -33,12 +33,12 @@ resource "azurerm_firewall_policy" "policy" {
 
   private_ip_ranges = ["value"]
   sku               = var.sku_tier
-  
+
   tls_certificate {
     key_vault_secret_id = var.kv_secret_id
     name                = var.kv_secret_name
   }
-  
+
   threat_intelligence_allowlist {
     fqdns        = [] # (Optional) A list of FQDNs that will be skipped for threat detection.
     ip_addresses = [] #(Optional) A list of IP addresses or IP address ranges that will be skipped for threat detection.
