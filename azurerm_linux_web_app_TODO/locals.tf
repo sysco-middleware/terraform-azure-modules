@@ -25,7 +25,7 @@ locals {
     WEBSITE_DYNAMIC_CACHE                   = "0"
     WEBSITE_RUN_FROM_PACKAGE                = 1
     WEBSITE_ENABLE_SYNC_UPDATE_SITE         = true
-    WEBSITE_TIME_ZONE                       = "Central Europe Standard Time"
+    WEBSITE_TIME_ZONE                       = "W. Europe Standard Time"
     InstrumentationEngine_EXTENSION_VERSION = "disabled"
   }
   appsettings_appinsights = var.app_insights.enabled ? {

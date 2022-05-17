@@ -408,7 +408,7 @@ variable "storage_account" {
 variable "time_zone" {
   type        = string
   description = "The function app time zone. https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones?view=windows-11"
-  default     = "Central Europe Standard Time"
+  default     = "W. Europe Standard Time"
 }
 variable "tags" {
   type        = map(any)

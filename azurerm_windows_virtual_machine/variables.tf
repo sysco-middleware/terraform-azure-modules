@@ -109,7 +109,7 @@ variable "admin_pass" {
 variable "timezone" {
   type        = string
   description = "(Optional) Specifies the time zone of the virtual machine. https://jackstromberg.com/2017/01/list-of-time-zones-consumed-by-azure/"
-  default     = "Central Europe Standard Time"
+  default     = "W. Europe Standard Time"
 }
 variable "patch_mode" {
   type        = string
