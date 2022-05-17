@@ -6,6 +6,12 @@ resource "azurerm_private_endpoint" "pe" {
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
   subnet_id           = var.subnet_id
+  tags                = var.tags
+
+  private_dns_zone_group {
+    name = var.pdzg_name
+    private_dns_zone_ids = var.pdzg_list 
+  }
 
   private_service_connection {
     name                              = local.psc_name
