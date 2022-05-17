@@ -38,7 +38,7 @@ variable "dns_servers" {
   description = "(Optional) A list of DNS servers that the Azure Firewall will direct DNS traffic to the for name resolution."
   default     = []
   validation {
-    condition     = length(local.dns_servers) > 0
+    condition     = length(var.dns_servers) > 0
     error_message = "The Variable 'dns_servers' must have atleast one item."
   }
 }
