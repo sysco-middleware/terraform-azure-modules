@@ -1,6 +1,6 @@
 variable "name" {}
 variable "rg_name" {}
-variable "vnet_rg_name" {}
+variable "vnet_name" {}
 
 variable "pipa_id" {
   type = string
@@ -42,7 +42,7 @@ variable "snet_fw_name" {
 }
 variable "snet_mgnt_name" {
   type        = string
-  description = "The Subnet used for the Firewall must have the name AzureFirewallSAzureFirewallManagementSubnet ubnet and the subnet mask must be at least a /26."
+  description = "The Subnet used for the Firewall must have the name 'AzureFirewallManagementSubnet' ubnet and the subnet mask must be at least a /26."
   default     = "AzureFirewallManagementSubnet"
   validation {
     condition     = try(var.snet_mgnt_name == "AzureFirewallManagementSubnet")
@@ -55,6 +55,7 @@ variable "firewall_policy_id" {
   description = "(Optional) The ID of the Firewall Policy applied to this Firewall."
   default     = null
 }
+
 variable "tags" {
   type        = map(any)
   description = "A mapping of tags to assign to the resource."

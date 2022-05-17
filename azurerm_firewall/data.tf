@@ -18,11 +18,6 @@ data "azurerm_subnet" "snet_mgnt" {
   resource_group_name  = var.rg_name
 }
 
-data "azurerm_public_ip" "pipa" {
-  name                = var.pipa_name
-  resource_group_name = var.rg_name
-}
-
 data "azurerm_firewall" "fw" {
   depends_on = [azurerm_firewall.fw]
 
