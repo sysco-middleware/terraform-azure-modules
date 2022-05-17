@@ -38,7 +38,7 @@ variable "dns_servers" {
   description = "(Optional) A list of DNS servers that the Azure Firewall will direct DNS traffic to the for name resolution."
   default     = []
   validation {
-    condition = length(local.dns_servers) > 0
+    condition     = length(local.dns_servers) > 0
     error_message = "The Variable 'dns_servers' must have atleast one item."
   }
 }
@@ -49,7 +49,7 @@ variable "snet_fw_name" {
   default     = "AzureFirewallSubnet"
   validation {
     condition     = try(var.snet_fw_name == "AzureFirewallSubnet")
-    error_message = "The snet_name variable for the Firewall must have the name AzureFirewallSubnet."
+    error_message = "The 'snet_fw_name' variable for the Firewall must have the name AzureFirewallSubnet."
   }
 }
 variable "snet_mgnt_name" {
@@ -58,7 +58,7 @@ variable "snet_mgnt_name" {
   default     = "AzureFirewallManagementSubnet"
   validation {
     condition     = try(var.snet_mgnt_name == "AzureFirewallManagementSubnet")
-    error_message = "The snet_name variable for the Firewall must have the name AzureFirewallManagementSubnet."
+    error_message = "The 'snet_mgnt_name' variable for the Firewall must have the name AzureFirewallManagementSubnet."
   }
 }
 
@@ -66,6 +66,16 @@ variable "firewall_policy_id" {
   type        = string
   description = "(Optional) The ID of the Firewall Policy applied to this Firewall."
   default     = null
+}
+
+variable "threat_intel_mode" {
+  type        = string
+  description = "(Optional) The operation mode for threat intelligence-based filtering. Possible values are: Off, Alert, Deny and \"\" (empty string). Defaults to Alert."
+  default     = "Alert"
+  validation {
+    condition     = can(regex("Off|Alert|Deny", var.threat_intel_mode)) || var.threat_intel_mode == ""
+    error_message = "The variable 'threat_intel_mode' must be Off, Alert (Default), Deny or \"\"."
+  }
 }
 
 variable "tags" {

@@ -20,7 +20,7 @@ data "azurerm_subnet" "snet_fw" {
 
 data "azurerm_subnet" "snet_mgnt" {
   depends_on = [data.azurerm_resource_group.rg]
-  count = var.pipa_id_mgmt |= null ? 1 : 0
+  count      = var.pipa_id_mgmt != null ? 1 : 0
 
   name                 = var.snet_mgnt_name
   virtual_network_name = var.vnet_name
