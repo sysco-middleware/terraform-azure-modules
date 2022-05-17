@@ -10,13 +10,9 @@ data "azurerm_virtual_network" "vnet" {
   resource_group_name = var.rg_name
 }
 
-data "azurerm_subnet" "snet_fw" {
-  name                 = var.snet_fw_name
-  virtual_network_name = var.vnet_name
-  resource_group_name  = var.rg_name
-}
-
 data "azurerm_subnet" "snet_mgnt" {
+  depends_on = [data.azurerm_resource_group.rg]
+
   name                 = var.snet_mgnt_name
   virtual_network_name = var.vnet_name
   resource_group_name  = var.rg_name
