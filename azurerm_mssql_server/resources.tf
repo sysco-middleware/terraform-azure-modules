@@ -10,7 +10,7 @@ resource "azuread_group" "sql_admin_group" {
   description = "The SQL identity group of the Azure AD Administrator of the SQL Server."
 
   owners  = [data.azuread_client_config.current.object_id]
-  members = concat(var.admin_member_ids, var.dev_member_ids)
+  members = concat(var.member_admin_ids, var.member_dev_ids)
 }
 
 resource "azurerm_key_vault_secret" "kv_secret_admin_user" {
@@ -70,7 +70,7 @@ resource "azurerm_mssql_server" "sql" {
   tags = var.tags
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location, administrator_login, version]
+    ignore_changes = [tags, location, administrator_login, version]
   }
 }
 

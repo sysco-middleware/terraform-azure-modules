@@ -38,12 +38,12 @@ variable "admin_pass" {
     error_message = "Variable \"admin_pass.value\" must have a valid password."
   }
 }
-variable "admin_member_ids" {
+variable "member_admin_ids" {
   type        = list(string)
   description = "The object IDs of the Admins users of the sql_admin_group"
   default     = []
 }
-variable "dev_member_ids" {
+variable "member_dev_ids" {
   type        = list(string)
   description = "The object IDs of the Developer users of the sql_admin_group"
   default     = []

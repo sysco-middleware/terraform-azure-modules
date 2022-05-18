@@ -33,7 +33,7 @@ resource "azurerm_virtual_network" "vnet" {
   }
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location]
+    ignore_changes = [tags, location]
   }
 }
 
