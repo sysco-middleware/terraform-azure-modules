@@ -7,7 +7,7 @@ resource "azurerm_firewall_policy" "policy" {
   location                 = data.azurerm_resource_group.rg.location
   private_ip_ranges        = var.private_ip_ranges
   sku                      = var.sku_tier
-  threat_intelligence_mode = local.threat_intel_mode
+  threat_intelligence_mode = var.threat_mode
   base_policy_id           = var.base_policy_id
   tags                     = var.tags
 
@@ -37,7 +37,7 @@ resource "azurerm_firewall_policy" "policy" {
       }
     }
 
-    dynamic "intrusion_traffic_bypass" {
+    dynamic "traffic_bypass" {
       for_each = length(var.intrusion_traffic_bypasses) > 0 ? var.intrusion_traffic_bypasses : []
       iterator = each
 
@@ -54,23 +54,18 @@ resource "azurerm_firewall_policy" "policy" {
     }
   }
 
-  dynamic "insights" {
-    for_each = var.logs.enabled ? var.logs : []
-    iterator = each
+  insights {
+    enabled                            = var.logs.enabled
+    default_log_analytics_workspace_id = var.logs.law_id
+    retention_in_days                  = var.logs.retention
 
-    content {
-      enabled                            = each.value.enabled
-      default_log_analytics_workspace_id = each.value.law_id
-      retention_in_days                  = each.value.retention
+    dynamic "log_analytics_workspace" {
+      for_each = length(var.logs.laws) > 0 ? var.logs.laws : []
+      iterator = each
 
-      dynamic "log_analytics_workspace" {
-        for_each = length(each.value.laws) > 0 ? each.value.laws : []
-        iterator = eachsub
-
-        content {
-          id                = eachsub.value.id
-          firewall_location = eachsub.value.firewall_location
-        }
+      content {
+        id                = each.value.id
+        firewall_location = each.value.firewall_location
       }
     }
   }
