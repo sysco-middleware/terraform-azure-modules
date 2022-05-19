@@ -1,5 +1,4 @@
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/firewall_policy
-
 resource "azurerm_firewall_policy" "policy" {
   depends_on = [data.azurerm_resource_group.rg]
 
