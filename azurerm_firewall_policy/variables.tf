@@ -98,9 +98,9 @@ variable "logs" {
   description = "Log insights"
   default = {
     enabled                    = false
-    log_analytics_workspace_id = null
-    retention_days             = 1
-    log_analytics_workspace    = []
+    law_id = null
+    retention             = 1
+    laws    = []
   }
 }
 
@@ -109,7 +109,7 @@ variable "dns" {
     proxy_enabled = bool         # (Optional) Whether to enable DNS proxy on Firewalls attached to this Firewall Policy? Defaults to false.
     servers       = list(string) # (Optional) A list of custom DNS servers' IP addresses.
   })
-  description = "DNS "
+  description = "DNS"
   default = {
     proxy_enabled = false
     servers       = []
