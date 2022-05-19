@@ -66,8 +66,8 @@ variable "snat_ip_ranges" {
   description = "(Optional) A list of private IP ranges to which traffic will not be SNAT. Requires at least one IP range. https://docs.microsoft.com/en-us/azure/firewall/snat-private-range"
   default     = ["IANAPrivateRanges"]
   validation {
-    condition     = length(var.private_ip_ranges) > 0
-    error_message = "The variable 'private_ip_ranges' must have atleat one IP range item."
+    condition     = length(var.snat_ip_ranges) > 0
+    error_message = "The variable 'snat_ip_ranges' must have atleast one IP range item."
   }
 }
 
