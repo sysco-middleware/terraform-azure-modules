@@ -5,10 +5,11 @@ variable "certificate" {
     kv_secret_id = string # (Required) The ID of the Key Vault, where the secret or certificate is stored.
     name         = string # (Required) The name of the certificate.
   })
-  default = {
-    fqdns        = []
-    ip_addresses = []
-  }
+  type = object({
+    kv_secret_id = string # (Required) The ID of the Key Vault, where the secret or certificate is stored.
+    name         = string # (Required) The name of the certificate.
+  })
+  description = "TLS certifcate for firewall policy"
 }
 
 variable "base_policy_id" {
