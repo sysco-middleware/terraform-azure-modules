@@ -50,10 +50,21 @@ variable "intrusion_traffic_bypasses" {
   default     = []
 }
 
-variable "private_ip_ranges" {
-  type        = list(string)
-  description = "(Optional) A list of private IP ranges to which traffic will not be SNAT. Requires at least one IP range."
+variable "snat_rules" {
+  type        = string
+  description = "SNAT rules zure Firewall can never (Default) or always route traffic directly to the Internet.  https://docs.microsoft.com/en-us/azure/firewall/snat-private-range"
+  default     = "Never"
 
+  validation {
+    condition     = can(regex("Always|Never|UseIPRanges", var.snat_rules))
+    error_message = "The variable 'snat_rules' must be either Always, Never (Default), or UseIPRanges."
+  }
+}
+
+variable "snat_ip_ranges" {
+  type        = list(string)
+  description = "(Optional) A list of private IP ranges to which traffic will not be SNAT. Requires at least one IP range. https://docs.microsoft.com/en-us/azure/firewall/snat-private-range"
+  default     = ["IANAPrivateRanges"]
   validation {
     condition     = length(var.private_ip_ranges) > 0
     error_message = "The variable 'private_ip_ranges' must have atleat one IP range item."
@@ -101,7 +112,7 @@ variable "logs" {
   default = {
     enabled   = false
     law_id    = null
-    retention = 1
+    retention = 30
     laws      = []
   }
 }
