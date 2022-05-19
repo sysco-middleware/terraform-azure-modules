@@ -5,7 +5,7 @@ resource "azurerm_firewall_policy" "policy" {
   name                     = var.name
   resource_group_name      = data.azurerm_resource_group.rg.name
   location                 = data.azurerm_resource_group.rg.location
-  private_ip_ranges        = var.private_ip_ranges
+  private_ip_ranges        = local.private_ip_ranges
   sku                      = var.sku_tier
   threat_intelligence_mode = var.threat_mode
   base_policy_id           = var.base_policy_id
