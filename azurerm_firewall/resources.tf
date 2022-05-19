@@ -13,7 +13,7 @@ resource "azurerm_firewall" "fw" {
   tags                = var.tags
 
   ip_configuration {
-    name                 = "ip configuration"
+    name                 = var.ip_conf_name
     subnet_id            = data.azurerm_subnet.snet_fw.id
     public_ip_address_id = var.pipa_id
   }
@@ -22,7 +22,7 @@ resource "azurerm_firewall" "fw" {
     for_each = var.pipa_id_mgmt != null ? [1] : []
 
     content {
-      name                 = "mgnt ip configuration"
+      name                 = var.ip_conf_mgt_name
       subnet_id            = data.azurerm_subnet.snet_mgnt[0].id
       public_ip_address_id = var.pipa_id_mgmt
     }

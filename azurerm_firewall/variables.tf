@@ -2,6 +2,18 @@ variable "name" {}
 variable "rg_name" {}
 variable "vnet_name" {}
 
+variable "ip_conf_name" {
+  type        = string
+  description = "The name of the IP Configuration"
+  default     = "ip-configuration"
+}
+
+variable "ip_conf_mgt_name" {
+  type        = string
+  description = "The name of the IP Management Configuration"
+  default     = "ip-mgnt-configuration"
+}
+
 variable "pipa_id" {
   type        = string
   description = "The Public IP must have a Static allocation and Standard sku."
