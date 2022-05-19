@@ -52,8 +52,12 @@ variable "intrusion_traffic_bypasses" {
 
 variable "private_ip_ranges" {
   type        = list(string)
-  description = "(Optional) A list of private IP ranges to which traffic will not be SNAT."
-  default     = []
+  description = "(Optional) A list of private IP ranges to which traffic will not be SNAT. Requires at least one IP range."
+
+  validation {
+    condition     = length(var.private_ip_ranges) > 0
+    error_message = "The variable 'private_ip_ranges' must have atleat one IP range item."
+  }
 }
 
 variable "sku_tier" {
