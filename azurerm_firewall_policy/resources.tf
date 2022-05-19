@@ -55,18 +55,23 @@ resource "azurerm_firewall_policy" "policy" {
     }
   }
 
-  insights {
-    enabled                            = var.logs.enabled
-    default_log_analytics_workspace_id = var.logs.law_id
-    retention_in_days                  = var.logs.retention
+  dynamic "insights" {
+    for_each = var.logs.enabled ? var.logs : []
+    iterator = each
 
-    dynamic "log_analytics_workspace" {
-      for_each = length(var.logs.laws) > 0 ? var.logs.laws : []
-      iterator = each
+    content {
+      enabled                            = each.value.enabled
+      default_log_analytics_workspace_id = each.value.law_id
+      retention_in_days                  = each.value.retention
 
-      content {
-        id                = each.value.id
-        firewall_location = each.value.firewall_location
+      dynamic "log_analytics_workspace" {
+        for_each = length(each.value.laws) > 0 ? each.value.laws : []
+        iterator = eachsub
+
+        content {
+          id                = eachsub.value.id
+          firewall_location = eachsub.value.firewall_location
+        }
       }
     }
   }

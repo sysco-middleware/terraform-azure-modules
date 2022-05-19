@@ -1,10 +1,7 @@
 variable "name" {}
+variable "rg_name" {}
 
 variable "certificate" {
-  type = object({
-    kv_secret_id = string # (Required) The ID of the Key Vault, where the secret or certificate is stored.
-    name         = string # (Required) The name of the certificate.
-  })
   type = object({
     kv_secret_id = string # (Required) The ID of the Key Vault, where the secret or certificate is stored.
     name         = string # (Required) The name of the certificate.
@@ -98,10 +95,10 @@ variable "logs" {
   })
   description = "Log insights"
   default = {
-    enabled                    = false
-    law_id = null
-    retention             = 1
-    laws    = []
+    enabled   = false
+    law_id    = null
+    retention = 1
+    laws      = []
   }
 }
 
