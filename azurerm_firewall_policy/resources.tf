@@ -3,46 +3,86 @@
 resource "azurerm_firewall_policy" "policy" {
   depends_on = [data.azurerm_resource_group.rg]
 
-  name                = var.name
-  resource_group_name = data.azurerm_resource_group.rg.name
-  location            = data.azurerm_resource_group.rg.location
+  name                     = var.name
+  resource_group_name      = data.azurerm_resource_group.rg.name
+  location                 = data.azurerm_resource_group.rg.location
+  private_ip_ranges        = var.private_ip_ranges
+  sku                      = var.sku_tier
+  threat_intelligence_mode = local.threat_intel_mode
+  base_policy_id           = var.base_policy_id
+  tags                     = var.tags
 
   dns {
-    network_rule_fqdn_enabled = false
-    servers                   = var.dns_servers
+    proxy_enabled = var.dns.proxy_enabled
+    servers       = var.dns.servers
+  }
+
+  dynamic "identity" {
+    for_each = length(var.managed_identity_ids) > 0 ? [1] : []
+    content {
+      type         = var.managed_identity_type
+      identity_ids = var.managed_identity_ids
+    }
   }
 
   intrusion_detection {
-    mode = "Alert" # Off | Alert | Deny
-    signature_overrides {
-      id    = 777777777777 #  (Optional) 12-digit number (id) which identifies your signature.
-      state = "Off"        #  (Optional) state can be any of "Off", "Alert" or "Deny".
+    mode = var.intrusion_mode
+
+    dynamic "signature_overrides" {
+      for_each = length(var.intrusion_signature_overrides) > 0 ? var.intrusion_signature_overrides : []
+      iterator = each
+
+      content {
+        id    = each.value.id
+        state = each.value.state
+      }
     }
 
-    traffic_bypass {
-      name                  = "${var.name}-bypass_traffic"
-      protocol              = "ANY"    #  (Required) The protocols any of "ANY", "TCP", "ICMP", "UDP" that shall be bypassed by intrusion detection.
-      description           = "Bypass" #  (Optional) The description for this bypass traffic setting.
-      destination_addresses = ["TODO"] # (Optional) Specifies a list of destination IP addresses that shall be bypassed by intrusion detection.
-      destination_ip_groups = ["TODO"] # (Optional) Specifies a list of destination IP groups that shall be bypassed by intrusion detection
-      destination_ports     = ["TODO"] # (Optional) Specifies a list of destination IP ports that shall be bypassed by intrusion detection.
-      source_addresses      = ["TODO"] # (Optional) Specifies a list of source addresses that shall be bypassed by intrusion detection.
-      source_ip_groups      = ["TODO"] # (Optional) Specifies a list of source ip groups that shall be bypassed by intrusion detection.
+    dynamic "intrusion_traffic_bypass" {
+      for_each = length(var.intrusion_traffic_bypasses) > 0 ? var.intrusion_traffic_bypasses : []
+      iterator = each
+
+      content {
+        name                  = each.value.name
+        protocol              = each.value.protocol
+        description           = each.value.description
+        destination_addresses = each.value.destination_addresses
+        destination_ip_groups = each.value.destination_ip_groups
+        destination_ports     = each.value.destination_ports
+        source_addresses      = each.value.source_addresses
+        source_ip_groups      = each.value.source_ip_groups
+      }
     }
   }
 
-  private_ip_ranges = ["value"]
-  sku               = var.sku_tier
+  insights {
+    enabled                            = var.logs.enabled
+    default_log_analytics_workspace_id = var.logs.law_id
+    retention_in_days                  = var.logs.retention
+
+    dynamic "log_analytics_workspace" {
+      for_each = length(var.logs.laws) > 0 ? var.logs.laws : []
+      iterator = each
+
+      content {
+        id                = each.value.id
+        firewall_location = each.value.firewall_location
+      }
+    }
+  }
 
   tls_certificate {
-    key_vault_secret_id = var.kv_secret_id
-    name                = var.kv_secret_name
+    key_vault_secret_id = var.certificate.kv_secret_id
+    name                = var.certificate.name
   }
 
   threat_intelligence_allowlist {
-    fqdns        = [] # (Optional) A list of FQDNs that will be skipped for threat detection.
-    ip_addresses = [] #(Optional) A list of IP addresses or IP address ranges that will be skipped for threat detection.
+    fqdns        = var.threat_allowlist.fqdns
+    ip_addresses = var.threat_allowlist.ip_addresses
   }
-  threat_intelligence_mode = local.threat_intel_mode
+
+  lifecycle {
+    ignore_changes = [location, sku]
+  }
 }
 
