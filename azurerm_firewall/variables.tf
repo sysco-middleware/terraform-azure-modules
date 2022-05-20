@@ -53,11 +53,7 @@ variable "sku_tier" {
 variable "dns_servers" {
   type        = list(string)
   description = "(Optional) A list of DNS servers that the Azure Firewall will direct DNS traffic to the for name resolution."
-  default     = null
-  validation {
-    condition     = length(var.dns_servers) > 0 || var.dns_servers == null 
-    error_message = "The Variable 'dns_servers' must have atleast one item."
-  }
+  default     = []
 }
 
 variable "snet_fw_name" {

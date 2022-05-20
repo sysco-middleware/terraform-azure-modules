@@ -7,7 +7,7 @@ resource "azurerm_firewall" "fw" {
   location            = data.azurerm_resource_group.rg.location
   sku_name            = var.sku_name
   sku_tier            = var.sku_tier
-  dns_servers         = var.dns_servers
+  dns_servers         = local.dns_servers
   threat_intel_mode   = local.threat_intel_mode
   firewall_policy_id  = var.firewall_policy_id
   tags                = var.tags
