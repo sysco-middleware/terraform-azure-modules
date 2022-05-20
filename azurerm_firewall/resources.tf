@@ -27,6 +27,10 @@ resource "azurerm_firewall" "fw" {
       public_ip_address_id = var.pipa_id_mgmt
     }
   }
+
+  lifecycle {
+    ignore_changes = [tags, location]
+  }
 }
 
 resource "azurerm_management_lock" "fw_lock" {

@@ -1,6 +1,8 @@
 ### Module info
 ---
 
+
+* 
 `private_ip_ranges` 
 
 https://docs.microsoft.com/en-us/azure/firewall/snat-private-range
@@ -12,7 +14,9 @@ Use the subnet range (local IP ranges, such as 10.*.*.*/*, etc ) used by your fr
 
 https://docs.microsoft.com/en-us/azure/firewall/premium-features
 Intrusion, certificate and threat properties are only supported by Premium sku
+https://docs.microsoft.com/en-us/azure/firewall/premium-features
 
+`key_vault_secret_id` Create a certificate in 
 ### Notes
 ---
 

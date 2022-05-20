@@ -42,11 +42,11 @@ variable "sku_name" {
 
 variable "sku_tier" {
   type        = string
-  description = "(Optional) Sku tier of the Firewall. Possible values are Premium and Standard. Changing this forces a new resource to be created"
-  default     = "Standard"
+  description = "(Optional) Sku tier of the Firewall. Possible values are Premium (Default) and Standard. Changing this forces a new resource to be created"
+  default     = "Premium"
   validation {
     condition     = contains(["Standard", "Premium"], var.sku_tier)
-    error_message = "Variable \"sku_name\" must either be \"Standard\" or \"Premium\"."
+    error_message = "Variable 'sku_name' must either be Standard' or Premium (Default)."
   }
 }
 

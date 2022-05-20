@@ -3,15 +3,21 @@ variable "rg_name" {}
 
 variable "certificate" {
   type = object({
+    enabled      = bool
     kv_secret_id = string # (Required) The ID of the Key Vault, where the secret or certificate is stored.
     name         = string # (Required) The name of the certificate.
   })
-  description = "TLS certifcate for firewall policy"
+  description = "TLS certifcate for firewall policy. This is only activated for Premium sku_tier"
+  default = {
+    enabled      = false
+    kv_secret_id = null
+    name         = null
+  }
 }
 
 variable "base_policy_id" {
   type        = string
-  description = "(Optional) The ID of the base Firewall Policy."
+  description = "(Optional) The ID of the base Firewall Policy. This base policy must have the same SKU."
   default     = null
 }
 
@@ -73,12 +79,12 @@ variable "snat_ip_ranges" {
 
 variable "sku_tier" {
   type        = string
-  description = "(Optional) The SKU Tier of the Firewall Policy. Possible values are Standard, Premium. Changing this forces a new Firewall Policy to be created. Default is Standard."
-  default     = "Standard"
+  description = "(Optional) The SKU Tier of the Firewall Policy. Possible values are Standard and Premium (Default). Changing this forces a new Firewall Policy to be created. Default is Standard."
+  default     = "Premium"
 
   validation {
     condition     = can(regex("Standard|Premium", var.sku_tier))
-    error_message = "The variable 'sku_tier' must be either Standard (Default), or Premium."
+    error_message = "The variable 'sku_tier' must be either Standard, or Premium (Default)."
   }
 }
 

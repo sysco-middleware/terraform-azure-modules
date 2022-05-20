@@ -77,7 +77,7 @@ resource "azurerm_firewall_policy" "policy" {
 
   # Only when sku is Premium
   dynamic "tls_certificate" {
-    for_each = local.is_premium ? [1] : []
+    for_each = local.is_premium && var.certificate.enabled ? [1] : []
 
     content {
       key_vault_secret_id = var.certificate.kv_secret_id
@@ -86,8 +86,8 @@ resource "azurerm_firewall_policy" "policy" {
   }
 
   threat_intelligence_allowlist {
-      fqdns        = var.threat_allowlist.fqdns
-      ip_addresses = var.threat_allowlist.ip_addresses
+    fqdns        = var.threat_allowlist.fqdns
+    ip_addresses = var.threat_allowlist.ip_addresses
   }
 
   provisioner "local-exec" {
@@ -96,7 +96,7 @@ resource "azurerm_firewall_policy" "policy" {
   }
 
   lifecycle {
-    ignore_changes = [location, sku]
+    ignore_changes = [location]
   }
 }
 
