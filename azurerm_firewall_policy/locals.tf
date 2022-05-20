@@ -7,4 +7,6 @@ locals {
     UseIPRanges = var.snat_ip_ranges
   }
   private_ip_ranges = local.rules[var.snat_rules]
+
+  is_premium = var.sku_tier == "Premium"
 }

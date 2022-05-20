@@ -8,18 +8,12 @@ output "private_ip_address" {
   value       = azurerm_firewall.fw.ip_configuration[0].private_ip_address
 }
 
-### POLICY
-/*
-output "policy_id" {
-  description = "The ID of the Azure Firewall Policy."
-  value       = azurerm_firewall_policy.policy.id
+resource "azurerm_management_lock" "pipa_lock" {
+  depends_on = [azurerm_public_ip.pipa]
+  count      = var.lock_resource ? 1 : 0
+
+  name       = "CanNotDelete"
+  scope      = azurerm_public_ip.pipa.id
+  lock_level = "CanNotDelete"
+  notes      = "Terraform: This prevents accidental deletion if this resource"
 }
-output "child_policies" {
-  description = " A list of reference to child Firewall Policies of this Firewall Policy."
-  value       = azurerm_firewall_policy.policy.child_policies
-}
-output "policy_firewalls" {
-  description = "A list of references to Azure Firewalls that this Firewall Policy is associated with."
-  value       = azurerm_firewall_policy.policy.firewalls
-}
-*/

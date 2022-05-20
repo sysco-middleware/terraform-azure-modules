@@ -42,8 +42,18 @@ resource "azurerm_key_vault" "kv" {
     virtual_network_subnet_ids = var.network_acls.virtual_network_subnet_ids
   }
 
+  provisioner "local-exec" {
+    command    = "echo Provisioned ${self.name}"
+    on_failure = continue
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "echo 'Destroyed ${self.name}'"
+  }
+
   lifecycle {
-    ignore_changes = [tags["updated_date"], location, soft_delete_retention_days] # Must have this or else the resource will be replaced
+    ignore_changes = [tags, location, soft_delete_retention_days] # Must have this or else the resource will be replaced
   }
 }
 

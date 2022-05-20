@@ -103,7 +103,7 @@ resource "azurerm_storage_account" "sa" {
   }
 
   provisioner "local-exec" {
-    command    = "echo Installed ${self.name}"
+    command    = "echo Provisioned ${self.name}"
     on_failure = continue
   }
 

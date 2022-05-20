@@ -1,6 +1,11 @@
 variable "name" {}
 variable "rg_name" {}
 variable "vnet_name" {}
+variable "lock_resource" {
+  type        = bool
+  description = "Adds lock level CanNotDelete to the resource"
+  default     = false
+}
 
 variable "ip_conf_name" {
   type        = string
@@ -48,9 +53,9 @@ variable "sku_tier" {
 variable "dns_servers" {
   type        = list(string)
   description = "(Optional) A list of DNS servers that the Azure Firewall will direct DNS traffic to the for name resolution."
-  default     = []
+  default     = null
   validation {
-    condition     = length(var.dns_servers) > 0
+    condition     = length(var.dns_servers) > 0 || var.dns_servers == null 
     error_message = "The Variable 'dns_servers' must have atleast one item."
   }
 }

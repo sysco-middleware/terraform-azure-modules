@@ -24,32 +24,37 @@ resource "azurerm_firewall_policy" "policy" {
     }
   }
 
-  intrusion_detection {
-    mode = var.intrusion_mode
+  # Only when sku is Premium
+  dynamic "intrusion_detection" {
+    for_each = local.is_premium ? [1] : []
 
-    dynamic "signature_overrides" {
-      for_each = length(var.intrusion_signature_overrides) > 0 ? var.intrusion_signature_overrides : []
-      iterator = each
+    content {
+      mode = var.intrusion_mode
 
-      content {
-        id    = each.value.id
-        state = each.value.state
+      dynamic "signature_overrides" {
+        for_each = length(var.intrusion_signature_overrides) > 0 ? var.intrusion_signature_overrides : []
+        iterator = eachsub
+
+        content {
+          id    = eachsub.value.id
+          state = eachsub.value.state
+        }
       }
-    }
 
-    dynamic "traffic_bypass" {
-      for_each = length(var.intrusion_traffic_bypasses) > 0 ? var.intrusion_traffic_bypasses : []
-      iterator = each
+      dynamic "traffic_bypass" {
+        for_each = length(var.intrusion_traffic_bypasses) > 0 ? var.intrusion_traffic_bypasses : []
+        iterator = eachsub
 
-      content {
-        name                  = each.value.name
-        protocol              = each.value.protocol
-        description           = each.value.description
-        destination_addresses = each.value.destination_addresses
-        destination_ip_groups = each.value.destination_ip_groups
-        destination_ports     = each.value.destination_ports
-        source_addresses      = each.value.source_addresses
-        source_ip_groups      = each.value.source_ip_groups
+        content {
+          name                  = eachsub.value.name
+          protocol              = eachsub.value.protocol
+          description           = eachsub.value.description
+          destination_addresses = eachsub.value.destination_addresses
+          destination_ip_groups = eachsub.value.destination_ip_groups
+          destination_ports     = eachsub.value.destination_ports
+          source_addresses      = eachsub.value.source_addresses
+          source_ip_groups      = eachsub.value.source_ip_groups
+        }
       }
     }
   }
@@ -70,14 +75,24 @@ resource "azurerm_firewall_policy" "policy" {
     }
   }
 
-  tls_certificate {
-    key_vault_secret_id = var.certificate.kv_secret_id
-    name                = var.certificate.name
+  # Only when sku is Premium
+  dynamic "tls_certificate" {
+    for_each = local.is_premium ? [1] : []
+
+    content {
+      key_vault_secret_id = var.certificate.kv_secret_id
+      name                = var.certificate.name
+    }
   }
 
   threat_intelligence_allowlist {
-    fqdns        = var.threat_allowlist.fqdns
-    ip_addresses = var.threat_allowlist.ip_addresses
+      fqdns        = var.threat_allowlist.fqdns
+      ip_addresses = var.threat_allowlist.ip_addresses
+  }
+
+  provisioner "local-exec" {
+    command    = "echo Provisioned ${self.name}"
+    on_failure = continue
   }
 
   lifecycle {

@@ -8,6 +8,15 @@ https://docs.microsoft.com/en-us/azure/firewall/snat-private-range#firewall-poli
 
 Use the subnet range (local IP ranges, such as 10.*.*.*/*, etc ) used by your frontend or DMZ service (function app, web app, kubernetes egress etc)   
 
+`sku_tier`
+
+https://docs.microsoft.com/en-us/azure/firewall/premium-features
+Intrusion, certificate and threat properties are only supported by Premium sku
+
+### Notes
+---
+
+
 
 ### ERROR
 

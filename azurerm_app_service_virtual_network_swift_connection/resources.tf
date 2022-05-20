@@ -90,7 +90,7 @@ resource "null_resource" "route_all_lin_wa" {
   provisioner "local-exec" {
     when        = create
     command     = <<EOF
-      "az webapp config set --resource-group ${local.asvnsc_lin_apps_wa[count.index].rg_name} --name ${local.asvnsc_lin_apps_wa[count.index].name} --generic-configurations '{\"vnetRouteAllEnabled\": true}'"
+      "az webapp config set --resource-group ${local.asvnsc_lin_apps_wa[count.index].rg_name} --name ${local.asvnsc_lin_apps_wa[count.index].name} --generic-configurations '{\""vnetRouteAllEnabled\"": true}'"
     EOF
     interpreter = local.interpreter
     working_dir = path.module
@@ -109,7 +109,7 @@ resource "null_resource" "route_all_win_fa" {
   provisioner "local-exec" {
     when        = create
     command     = <<EOF
-      "az functionapp config set --resource-group ${local.asvnsc_win_apps_fa[count.index].rg_name} --name ${local.asvnsc_win_apps_fa[count.index].name} --generic-configurations '{\"vnetRouteAllEnabled\": true}'"
+      "az functionapp config set --resource-group ${local.asvnsc_win_apps_fa[count.index].rg_name} --name ${local.asvnsc_win_apps_fa[count.index].name} --generic-configurations '{\""vnetRouteAllEnabled\"": true}'"
     EOF
     interpreter = local.interpreter
     working_dir = path.module
@@ -128,7 +128,7 @@ resource "null_resource" "route_all_lin_fa" {
   provisioner "local-exec" {
     when        = create
     command     = <<EOF
-      "az functionapp config set --resource-group ${local.asvnsc_lin_apps_fa[count.index].rg_name} --name ${local.asvnsc_lin_apps_fa[count.index].name} --generic-configurations '{\"vnetRouteAllEnabled\": true}'"
+      "az functionapp config set --resource-group ${local.asvnsc_lin_apps_fa[count.index].rg_name} --name ${local.asvnsc_lin_apps_fa[count.index].name} --generic-configurations '{\""vnetRouteAllEnabled\"": true}'"
     EOF
     interpreter = local.interpreter
     working_dir = path.module

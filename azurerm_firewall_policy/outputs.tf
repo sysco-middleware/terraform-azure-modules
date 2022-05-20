@@ -12,3 +12,8 @@ output "firewalls" {
   description = "A list of references to Azure Firewalls that this Firewall Policy is associated with."
   value       = azurerm_firewall_policy.policy.firewalls
 }
+
+output "sku_tier" {
+  description = "The Sku tier."
+  value       = azurerm_firewall_policy.policy.sku
+}
