@@ -29,4 +29,12 @@ resource "azurerm_firewall" "fw" {
   }
 }
 
+resource "azurerm_management_lock" "fw_lock" {
+  depends_on = [azurerm_firewall.fw]
+  count      = var.lock_resource ? 1 : 0
 
+  name       = "CanNotDelete"
+  scope      = azurerm_firewall.fw.id
+  lock_level = "CanNotDelete"
+  notes      = "Terraform: This prevents accidental deletion if this resource"
+}
