@@ -12,6 +12,8 @@ resource "azurerm_servicebus_namespace" "sbns" {
   local_auth_enabled  = var.local_auth_enabled
   tags                = var.tags
 
+  # TODO:  customer_managed_key block supports the following:
+
   dynamic "identity" {
     for_each = var.managed_identity_type != null ? [1] : []
     content {
