@@ -7,12 +7,21 @@ resource "azurerm_servicebus_namespace" "sbns" {
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
   sku                 = var.sku
-  capacity            = var.capacity
+  capacity            = local.capacity
+  zone_redundant      = local.zone_redundant
+  local_auth_enabled  = var.local_auth_enabled
+  tags                = var.tags
 
-  tags = var.tags
+  dynamic "identity" {
+    for_each = var.managed_identity_type != null ? [1] : []
+    content {
+      type         = var.managed_identity_type
+      identity_ids = local.identity_ids
+    }
+  }
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location, sku] # IMPORTANT! Do do remove 'location' or else Terraform will want todo a forces replacement on the service bus 
+    ignore_changes = [tags, location, sku] # IMPORTANT! Do do remove 'location' or else Terraform will want todo a forces replacement on the service bus 
   }
 }
 
@@ -161,4 +170,14 @@ resource "azurerm_role_assignment" "sbns_role" {
   lifecycle {
     ignore_changes = [scope]
   }
+}
+
+resource "azurerm_management_lock" "sbns_lock" {
+  depends_on = [azurerm_servicebus_namespace.sbns]
+  count      = var.lock_resource ? 1 : 0
+
+  name       = "CanNotDelete"
+  scope      = azurerm_servicebus_namespace.sbns.id
+  lock_level = "CanNotDelete"
+  notes      = "Terraform: This prevents accidental deletion if this resource"
 }
