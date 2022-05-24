@@ -226,10 +226,10 @@ variable "powershell_core_version" {
   type        = number
   description = "(Optional) The version of Powershell Core to run. Possible values are 7."
   default     = null
-  validation {
-    condition     = contains(["7", "7.2"], var.powershell_core_version)
-    error_message = "Variable 'powershell_core_version' must either be '7' (Default) or '7.2'."
-  }
+  #validation {
+  #  condition     = contains(["7", "7.2"], var.powershell_core_version) || var.powershell_core_version == null
+  #  error_message = "Variable 'powershell_core_version' must either be '7' (Default) or '7.2'."
+  #}
 }
 
 variable "use_custom_runtime" {

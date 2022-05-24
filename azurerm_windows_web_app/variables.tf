@@ -213,7 +213,9 @@ variable "default_documents" {
     "iisstart.htm",
     "default.aspx",
     "index.php",
-    "hostingstart.html"
+    "hostingstart.html",
+    "index.js",
+    "index.py"
   ]
 }
 
@@ -280,7 +282,7 @@ variable "current_stack" {
   type        = string
   description = "(Optional) The Application Stack for the Windows Web App. Possible values include dotnet, dotnetcore, node, python, php, and java."
   validation {
-    condition     = can(regex("dotnet|dotnetcore|node|python|php|java", var.current_stack))
+    condition     = can(regex("dotnet$|dotnetcore|node|python|php|java", var.current_stack))
     error_message = "Variable 'current_stack' must either be dotnet, dotnetcore, node, python, php, or java."
   }
 }
