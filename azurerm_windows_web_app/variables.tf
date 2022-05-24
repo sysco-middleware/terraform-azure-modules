@@ -101,6 +101,12 @@ variable "client_certificate_mode" {
     error_message = "The variable 'client_cert_mode' must have value storage_account_type: Required, or  Optional (Default)."
   }
 }
+variable "vnet_route_all_enabled" {
+  type        = bool
+  description = "(Optional) Should all outbound traffic to have Virtual Network Security Groups and User Defined Routes applied? Defaults to true."
+  default     = true
+}
+
 variable "auto_heal_enabled" {
   type        = bool
   description = "(Optional) Should Auto heal rules be enabled. Required with auto_heal_setting."

@@ -44,24 +44,50 @@ resource "azurerm_application_gateway" "agw" {
     public_ip_address_id = data.azurerm_public_ip.pipa.id #  (Optional) The ID of a Public IP Address which the Application Gateway should use. The allocation method for the Public IP Address depends on the sku of this Application Gateway. Please refer to the Azure documentation for public IP addresses for details.
   }
 
-  backend_address_pool {
-    name = local.backend_address_pool_name
-    #ip_addresses  = ["10.2.1.8"]
-    # fqdn = []
+  dynamic "backend_address_pool" {
+    for_each = length(var.backend_address_pool) > 0 ? var.backend_address_pool : []
+    iterator = each
+
+    content {
+      name         = each.value.name
+      ip_addresses = each.value.ip_addresses
+      fqdn         = each.value.fqdn
+    }
   }
 
-  backend_http_settings {
-    name                  = local.http_setting_name
-    cookie_based_affinity = "Disabled"
-    affinity_cookie_name  = "ApplicationGatewayAffinity"
-    port                  = 443
-    protocol              = "Https"
-    request_timeout       = 10
-    #path = "/path"
-    #probe_name            = "probetest01abc"
-    #authentication_certificate {
-    #  name = local.auth_cert_name
-    #}
+  dynamic "backend_http_settings" {
+    for_each = length(var.backend_http_settings) > 0 ? var.backend_http_settings : []
+    iterator = each
+
+    content {
+      name                                 = each.value.name
+      cookie_based_affinity                = each.value.cookie_based_affinity # "Disabled"
+      affinity_cookie_name                 = each.value.affinity_cookie_name  # "ApplicationGatewayAffinity"
+      port                                 = each.value.port                  # 443
+      protocol                             = each.value.protocol              # "Https"
+      request_timeout                      = each.value.request_timeout       # 10
+      path                                 = each.value.path                  #"/path"
+      probe_name                           = each.value.probe_name            # "probetest01abc"
+      host_name                            = each.value.phnfba ? null : each.value.host_name
+      pick_host_name_from_backend_addresss = each.value.phnfba
+      trusted_root_certificate_names       = each.value.trcn
+
+      dynamic "authentication_certificate" {
+        for_each = length(each.value.auth_certificates) > 0 ? each.value.auth_certificates : []
+        iterator = eachsub
+
+        content {
+          name = eachsub.value.name
+          data = eachsub.value.data
+        }
+      }
+
+      connection_draining {
+        enabled           = each.value.connection_draining.enabled
+        drain_timeout_sec = each.value.connection_draining.drain_timeout_sec
+      }
+    }
+
   }
 
   #authentication_certificate {

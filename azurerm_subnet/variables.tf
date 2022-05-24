@@ -21,7 +21,8 @@ variable "delegation_actions" {
     "Microsoft.Network/virtualNetworks/subnets/action",
     "Microsoft.Network/virtualNetworks/subnets/join/action",
     "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action",
-    "Microsoft.Network/virtualNetworks/subnets/unprepareNetworkPolicies/action"
+    "Microsoft.Network/virtualNetworks/subnets/unprepareNetworkPolicies/action",
+    # Microsoft.Network/virtualNetworks/subnets/joinViaServiceEndpoint/action
   ]
 }
 

@@ -187,11 +187,11 @@ variable "app_service_logs" {
 
 variable "dotnet_version" {
   type        = string
-  description = "(Optional) The version of .Net to use. Possible values include 3.1 and 6.0."
+  description = "(Optional) The version of .Net to use. Possible values include 3.1 and 6."
   default     = "3.1"
   validation {
-    condition     = contains(["3.1", "6.0"], var.dotnet_version)
-    error_message = "Variable 'dotnet_version' must either be 3.1 (Default) or 6.0."
+    condition     = contains(["3.1", "6"], var.dotnet_version)
+    error_message = "Variable 'dotnet_version' must either be 3.1 (Default) or 6."
   }
 }
 
@@ -226,6 +226,10 @@ variable "powershell_core_version" {
   type        = number
   description = "(Optional) The version of Powershell Core to run. Possible values are 7."
   default     = null
+  validation {
+    condition     = contains(["7", "7.2"], var.powershell_core_version)
+    error_message = "Variable 'powershell_core_version' must either be '7' (Default) or '7.2'."
+  }
 }
 
 variable "use_custom_runtime" {

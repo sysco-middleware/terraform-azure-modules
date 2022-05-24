@@ -83,6 +83,38 @@ variable "host_names" {
   description = "List of http_listener host names. Supports wildcard. Example *.domain.com"
   default     = []
 }
+
+variable "backend_address_pool" {
+  type = list(object({
+    name         = string       #  (Required) The name of the Backend Address Pool.
+    ip_addresses = list(string) # (Optional) A list of IP Addresses which should be part of the Backend Address Pool.
+    fqdns        = list(string) # (Optional) A list of FQDN's which should be part of the Backend Address Pool. 
+  }))
+  default = []
+}
+
+variable "backend_http_settings" {
+  type = list(object({
+    name                  = string #  (Required) The name of the Backend Address Pool.
+    cookie_based_affinity = string # (Required) Is Cookie-Based Affinity enabled? Possible values are Enabled and Disabled.
+    affinity_cookie_name  = string # (Optional) The name of the affinity cookie.
+    path                  = string # (Optional) The Path which should be used as a prefix for all HTTP requests.
+    port                  = number # (Required) The port which should be used for this Backend HTTP Settings Collection.
+    probe_name            = string #  (Optional) The name of an associated HTTP Probe.
+    protocol              = string #  (Required) The Protocol which should be used. Possible values are Http and Https.
+    request_timeout       = number # (Required) The request timeout in seconds, which must be between 1 and 86400 seconds.
+    host_name             = string # (Optional) Host header to be sent to the backend servers. Cannot be set if pick_host_name_from_backend_address is set to true.
+    phnfba                = string #  (Optional) pick_host_name_from_backend_address. Whether host header should be picked from the host name of the backend server. Defaults to false.
+    auth_certificate = list(object({
+      name = string # (Required) The Name of the Authentication Certificate to use.
+      data = string # (Required) The contents of the Authentication Certificate which should be used.
+    }))
+    fqdns = list(string) # (Optional) A list of FQDN's which should be part of the Backend Address Pool. 
+  }))
+}
+
+
+
 variable "tags" {
   type        = map(any)
   description = "A mapping of tags to assign to the resource."
