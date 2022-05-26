@@ -8,6 +8,11 @@ variable "rg_name" {}
 variable "sa_name" {}
 variable "kv_name" {}
 variable "sql_admin_group" {}
+variable "law_id" {
+  type        = string
+  description = "Log Analytics Worspace ID for diagnostc logs"
+  default     = null
+}
 variable "admin_user" {
   type = object({
     name        = string
@@ -50,8 +55,8 @@ variable "member_dev_ids" {
 }
 variable "retention_in_days" {
   type        = number
-  description = "Specifies the number of days to retain logs for in the storage account."
-  default     = 14
+  description = "Specifies the number of days to retain logs for in the storage account. Default is 90 days."
+  default     = 90
 }
 variable "public_enabled" {
   type        = bool

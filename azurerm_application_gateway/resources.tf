@@ -17,6 +17,8 @@ resource "azurerm_application_gateway" "agw" {
   name                = var.name
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
+  firewall_policy_id  = var.fw_policy_id
+  fips_enabled        = var.fips_enabled
   tags                = var.tags
 
   sku {
@@ -29,23 +31,63 @@ resource "azurerm_application_gateway" "agw" {
     min_capacity = var.min_capacity
   }
 
-  gateway_ip_configuration {
-    name      = "${var.name}-ip-configuration"
-    subnet_id = data.azurerm_subnet.snet.id # (Required) The ID of the Subnet which the Application Gateway should be connected to.
+  dynamic "gateway_ip_configuration" {
+    for_each = length(var.gateway_ip_configurations) > 0 ? var.gateway_ip_configurations : []
+    iterator = each
+
+    content {
+      name      = each.value.name
+      subnet_id = each.value.snet_id
+    }
   }
 
-  frontend_port {
-    name = local.frontend_port_name
-    port = 80
+  dynamic "frontend_port" {
+    for_each = length(var.frontend_ports) > 0 ? var.frontend_ports : []
+    iterator = each
+
+    content {
+      name = each.value.name
+      port = each.value.port
+    }
   }
 
-  frontend_ip_configuration {
-    name                 = local.frontend_ip_configuration_name
-    public_ip_address_id = data.azurerm_public_ip.pipa.id #  (Optional) The ID of a Public IP Address which the Application Gateway should use. The allocation method for the Public IP Address depends on the sku of this Application Gateway. Please refer to the Azure documentation for public IP addresses for details.
+  dynamic "private_link_configuration" {
+    for_each = length(var.private_link_configurations) > 0 ? var.private_link_configurations : []
+    iterator = each
+
+    content {
+      name = each.value.name
+      dynamic "ip_configuration" {
+        for_each = length(each.value.ip_configurations) > 0 ? each.value.ip_configurations : []
+        iterator = eachsub
+
+        content {
+          name                          = eachsub.value.name
+          subnet_id                     = eachsub.value.snet_id
+          private_ip_address_allocation = eachsub.value.pipa_allocation
+          primary                       = eachsub.value.primary
+          private_ip_address            = eachsub.value.pipa
+        }
+      }
+    }
+  }
+
+  dynamic "frontend_ip_configuration" {
+    for_each = length(var.frontend_ip_configuration) > 0 ? var.frontend_ip_configuration : []
+    iterator = each
+
+    content {
+      name                            = each.value.name
+      subnet_id                       = each.value.snet_id
+      private_ip_address              = each.value.private_ip
+      public_ip_address_id            = each.value.pipa_id
+      public_ip_address_allocation    = each.value.pipa_allocation
+      private_link_configuration_name = each.value.private_link_cn
+    }
   }
 
   dynamic "backend_address_pool" {
-    for_each = length(var.backend_address_pool) > 0 ? var.backend_address_pool : []
+    for_each = length(var.backend_address_pools) > 0 ? var.backend_address_pools : []
     iterator = each
 
     content {
@@ -108,15 +150,32 @@ resource "azurerm_application_gateway" "agw" {
     }
   }
 
-  http_listener {
-    name                           = local.listener_name
-    frontend_ip_configuration_name = local.frontend_ip_configuration_name
-    frontend_port_name             = local.frontend_port_name
-    protocol                       = "https"
-    host_names                     = var.host_names
-    ssl_certificate_name           = var.ssl_cert_name #(Optional) The name of the associated SSL Certificate which should be used for this HTTP Listener.
-    # custom_error_configuration - (Optional) One or more custom_error_configuration blocks as defined below.
-    # firewall_policy_id - (Optional) The ID of the Web Application Firewall Policy which should be used for this HTTP Listener.
+  dynamic "http_listener" {
+    for_each = length(var.http_listeners) > 0 ? var.http_listeners : []
+    iterator = each
+
+    content {
+      name                           = each.value.name
+      frontend_ip_configuration_name = each.value.fip_conf_name
+      frontend_port_name             = each.value.fip_port_name
+      protocol                       = each.value.protocol
+      host_name                      = each.value.host_name
+      host_names                     = each.value.host_name == null ? each.value.host_names : null
+      ssl_certificate_name           = each.value.ssl_cert_name
+      ssl_profile_name               = each.value.ssl_profile_name
+      firewall_policy_id             = each.value.fw_policy_id
+      # require_sni - (Optional) Should Server Name Indication be Required? Defaults to false.
+
+      dynamic "custom_error_configuration" {
+        for_each = length(each.value.custom_errors) > 0 ? each.value.custom_errors : []
+        iterator = eachsub
+
+        content {
+          status_code           = eachsub.value.status_code
+          custom_error_page_url = eachsub.value.page_url
+        }
+      }
+    }
   }
 
   request_routing_rule {
@@ -137,6 +196,7 @@ resource "azurerm_application_gateway" "agw" {
     type         = "UserAssigned"                          #  (Optional) The Managed Service Identity Type of this Application Gateway. The only possible value is UserAssigned. Defaults to UserAssigned
     identity_ids = [azurerm_user_assigned_identity.uai.id] #concat([azurerm_user_assigned_identity.uai.id], var.identity_ids)
   }
+
   ssl_policy {
     policy_type          = "Custom"
     min_protocol_version = "TLSv1_2"
@@ -167,6 +227,16 @@ resource "azurerm_application_gateway" "agw" {
     }
   }
   */
+
+  dynamic "custom_error_configuration" {
+    for_each = length(var.custom_errors) > 0 ? var.custom_errors : []
+    iterator = each
+
+    content {
+      status_code           = each.value.status_code
+      custom_error_page_url = each.value.page_url
+    }
+  }
 
   lifecycle {
     ignore_changes = [tags, location]

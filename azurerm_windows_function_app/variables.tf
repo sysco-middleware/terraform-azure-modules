@@ -106,7 +106,7 @@ variable "client_certificate_mode" {
   default     = "OptionalInteractiveUser"
   validation {
     condition     = can(regex("^Required$|^Optional$|OptionalInteractiveUser", var.client_certificate_mode))
-    error_message = "The variable 'client_cert_mode' must have value storage_account_type: Required, Optional, or OptionalInteractiveUser (Default)."
+    error_message = "The variable 'client_certificate_mode' must have value storage_account_type: Required, Optional, or OptionalInteractiveUser (Default)."
   }
 }
 variable "managed_pipeline_mode" {

@@ -178,6 +178,37 @@ resource "azurerm_mssql_server_vulnerability_assessment" "assess" {
   }
 }
 
+resource "azurerm_monitor_diagnostic_setting" "mds" {
+  depends_on = [azurerm_mssql_server.sql]
+  count      = var.law_id == null ? 0 : 1
+
+  name                       = "${var.name}-ds"
+  target_resource_id         = "${azurerm_mssql_server.sql.id}/databases/master"
+  log_analytics_workspace_id = var.law_id
+
+  log {
+    category = "SQLSecurityAuditEvents"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = var.retention_in_days
+    }
+  }
+
+  metric {
+    category = "AllMetrics"
+    retention_policy {
+      enabled = true
+      days    = var.retention_in_days
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [log, metric]
+  }
+}
+
 ///////////////////////////////////////////////////////////////////////
 //////////// RBAC
 resource "azurerm_role_assignment" "role_sql" {

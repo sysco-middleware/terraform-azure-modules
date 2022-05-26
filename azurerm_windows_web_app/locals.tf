@@ -26,4 +26,26 @@ locals {
   node_version           = can(regex("node", var.current_stack)) ? var.node_version : null
 
   ftps_state = var.application_logs.enabled ? "FtpsOnly" : var.ftps_state
+
+  client_certificate = {
+    "Allowed" = {
+      client_certificate_enabled = true
+      client_certificate_mode    = "Optional"
+    }
+    "Required" = {
+      client_certificate_enabled = true
+      client_certificate_mode    = "Required"
+    }
+    "Optional" = {
+      client_certificate_enabled = true
+      client_certificate_mode    = "Optional"
+    }
+    "Required" = {
+      client_certificate_enabled = true
+      client_certificate_mode    = "Required"
+    }
+  }
+  client_certificate_enabled = can(regex("^Required$|^Allowed$", var.client_certificate_mode)) ? true : false
+  client_certificate_mode    = can(regex("^Required$|^Optional$|^Allowed$", var.client_certificate_mode))
+
 }

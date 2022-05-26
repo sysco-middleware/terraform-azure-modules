@@ -1,6 +1,9 @@
 https://github.com/kumarvna/terraform-azurerm-application-gateway
 
 
+`private_link_configuration`
+The AllowApplicationGatewayPrivateLink feature must be registered on the subscription before enabling private link
+
 ##### PROBLEM
 
 │ Error: creating/updating Application Gateway: (Name "*" / Resource Group "*"): network.ApplicationGatewaysClient#CreateOrUpdate: Failure sending request: StatusCode=400 -- Original Error: 

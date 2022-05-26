@@ -89,16 +89,16 @@ variable "client_affinity_enabled" {
 }
 variable "client_certificate_enabled" {
   type        = bool
-  description = "(Optional) Should the function app use Client Certificates."
+  description = "(Optional) Should the function app use Client Certificates. This must be enabled for "
   default     = false
 }
 variable "client_certificate_mode" {
   type        = string
-  description = "(Optional) The Client Certificate mode. Possible values include Optional and Required. This property has no effect when client_cert_enabled is false."
-  default     = "Optional"
+  description = "(Optional) The Client Certificate mode. Possible values include Optional (Default), OptionalInteractiveUser and Required. This property has no effect when client_cert_enabled is false."
+  default     = "Optional" # Similar to Allowed in the Web App resource
   validation {
-    condition     = can(regex("^Required$|^Optional$", var.client_certificate_mode))
-    error_message = "The variable 'client_cert_mode' must have value storage_account_type: Required, or  Optional (Default)."
+    condition     = can(regex("^Required$|^Optional$|OptionalInteractiveUser", var.client_certificate_mode))
+    error_message = "The variable 'client_certificate_mode' must be: Optional (Default), OptionalInteractiveUser and Required."
   }
 }
 variable "vnet_route_all_enabled" {

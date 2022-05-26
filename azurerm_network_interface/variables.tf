@@ -31,7 +31,7 @@ variable "dns_servers" {
 variable "enable_ip_forwarding" {
   type        = bool
   description = "(Optional) Should IP Forwarding be enabled? Defaults to false"
-  default     = true
+  default     = false
 }
 variable "internal_dns_name_label" {
   type        = string
