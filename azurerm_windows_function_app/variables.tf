@@ -103,7 +103,7 @@ variable "client_certificate_enabled" {
 variable "client_certificate_mode" {
   type        = string
   description = "(Optional) The mode of the Function App's client certificates requirement for incoming requests. Possible values are Required, Optional, and OptionalInteractiveUser."
-  default     = "Optional"
+  default     = "Optional" # Similar to Allowed in the Web App resource if cert is enabled
   validation {
     condition     = can(regex("^Required$|^Optional$|OptionalInteractiveUser", var.client_certificate_mode))
     error_message = "The variable 'client_certificate_mode' must have value storage_account_type: Required, Optional, or OptionalInteractiveUser (Default)."

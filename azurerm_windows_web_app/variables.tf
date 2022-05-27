@@ -95,7 +95,7 @@ variable "client_certificate_enabled" {
 variable "client_certificate_mode" {
   type        = string
   description = "(Optional) The Client Certificate mode. Possible values include Optional (Default), OptionalInteractiveUser and Required. This property has no effect when client_cert_enabled is false."
-  default     = "Optional" # Similar to Allowed in the Web App resource
+  default     = "Optional" # Similar to Allowed in the Web App resource if cert is enabled
   validation {
     condition     = can(regex("^Required$|^Optional$|OptionalInteractiveUser", var.client_certificate_mode))
     error_message = "The variable 'client_certificate_mode' must be: Optional (Default), OptionalInteractiveUser and Required."
