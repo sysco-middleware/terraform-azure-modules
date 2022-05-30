@@ -95,6 +95,7 @@ variable "cors" {
     support_credentials = true
   }
 }
+/*
 variable "client_certificate_enabled" {
   type        = bool
   description = "(Optional) Should the function app use Client Certificates."
@@ -107,6 +108,16 @@ variable "client_certificate_mode" {
   validation {
     condition     = can(regex("^Required$|^Optional$|OptionalInteractiveUser", var.client_certificate_mode))
     error_message = "The variable 'client_certificate_mode' must have value storage_account_type: Required, Optional, or OptionalInteractiveUser (Default)."
+  }
+}
+*/
+variable "client_certificate_mode" {
+  type        = string
+  description = "(Optional) Incoming client certificate mode. Possible values include Require, Allow (Default), Optional or Ignore."
+  default     = "Allow"
+  validation {
+    condition     = can(regex("Require|Optional|Allow|Ignore", var.client_certificate_mode))
+    error_message = "The variable 'client_certificate_mode' must be: Require, Allow (Default), Optional or Ignore."
   }
 }
 variable "managed_pipeline_mode" {

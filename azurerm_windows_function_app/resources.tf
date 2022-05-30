@@ -14,8 +14,8 @@ resource "azurerm_windows_function_app" "wfa" {
   builtin_logging_enabled     = var.builtin_logging_enabled
   storage_account_name        = data.azurerm_storage_account.sa.name
   storage_account_access_key  = data.azurerm_storage_account.sa.primary_access_key
-  client_certificate_enabled  = var.client_certificate_enabled
-  client_certificate_mode     = var.client_certificate_mode
+  client_certificate_enabled  = local.client_certificate_enabled
+  client_certificate_mode     = local.client_certificate_mode
   daily_memory_time_quota     = var.daily_memory_time_quota
   functions_extension_version = var.runtime_version
   tags                        = var.tags

@@ -87,6 +87,7 @@ variable "client_affinity_enabled" {
   description = "(Optional) Should Client Affinity be enabled?"
   default     = false
 }
+/*
 variable "client_certificate_enabled" {
   type        = bool
   description = "(Optional) Should the function app use Client Certificates. This must be enabled for "
@@ -101,6 +102,18 @@ variable "client_certificate_mode" {
     error_message = "The variable 'client_certificate_mode' must be: Optional (Default), OptionalInteractiveUser and Required."
   }
 }
+*/
+
+variable "client_certificate_mode" {
+  type        = string
+  description = "(Optional) Incoming client certificate mode. Possible values include Require, Allow (Default), Optional or Ignore."
+  default     = "Allow"
+  validation {
+    condition     = can(regex("Require|Optional|Allow|Ignore", var.client_certificate_mode))
+    error_message = "The variable 'client_certificate_mode' must be: Require, Allow (Default), Optional or Ignore."
+  }
+}
+
 variable "vnet_route_all_enabled" {
   type        = bool
   description = "(Optional) Should all outbound traffic to have Virtual Network Security Groups and User Defined Routes applied? Defaults to true."

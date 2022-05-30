@@ -28,24 +28,27 @@ locals {
   ftps_state = var.application_logs.enabled ? "FtpsOnly" : var.ftps_state
 
   client_certificate = {
-    "Allowed" = {
-      client_certificate_enabled = true
-      client_certificate_mode    = "Optional"
+    # All requests must be authenticated through a client certificate.
+    "Require" = {
+      enabled = true
+      mode    = "Required"
     }
-    "Required" = {
-      client_certificate_enabled = true
-      client_certificate_mode    = "Required"
+    # Clients will be prompted for a certificate, if no certificate is provided fallback to SSO or other means of authentication. Unauthenticated requests will be blocked.
+    "Allow" = {
+      enabled = true
+      mode    = "Optional"
     }
+    # Clients will not be prompted for a certificate by default. Unless the request can be authenticated through other means (like SSO), it will be blocked.
     "Optional" = {
-      client_certificate_enabled = true
-      client_certificate_mode    = "Optional"
+      enabled = false
+      mode    = "OptionalInteractiveUser"
     }
-    "Required" = {
-      client_certificate_enabled = true
-      client_certificate_mode    = "Required"
+    # No client authentication is required. Unauthenticated requests will not be blocked.
+    "Ignore" = {
+      enabled = false
+      mode    = "Optional"
     }
   }
-  client_certificate_enabled = can(regex("^Required$|^Allowed$", var.client_certificate_mode)) ? true : false
-  client_certificate_mode    = can(regex("^Required$|^Optional$|^Allowed$", var.client_certificate_mode))
-
+  client_certificate_enabled = local.client_certificate[var.client_certificate_mode].enabled
+  client_certificate_mode    = local.client_certificate[var.client_certificate_mode].mode
 }

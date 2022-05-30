@@ -10,7 +10,7 @@ resource "azurerm_windows_web_app" "wwa" {
   resource_group_name        = data.azurerm_resource_group.rg.name
   service_plan_id            = data.azurerm_service_plan.sp.id
   https_only                 = var.https_only
-  client_affinity_enabled    = var.client_affinity_enabled
+  client_affinity_enabled    = local.client_affinity_enabled
   client_certificate_enabled = local.client_certificate_enabled
   client_certificate_mode    = var.client_certificate_mode
   tags                       = var.tags
