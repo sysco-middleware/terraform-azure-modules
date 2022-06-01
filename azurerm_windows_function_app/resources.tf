@@ -138,6 +138,6 @@ resource "azurerm_windows_function_app" "wfa" {
   }
 
   lifecycle {
-    ignore_changes = [tags, location, storage_account_access_key] # app_settings,  Bug! needs to fixed
+    ignore_changes = [tags, location, app_settings, storage_account_access_key] # app_settings,  Bug! needs to fixed
   }
 }
