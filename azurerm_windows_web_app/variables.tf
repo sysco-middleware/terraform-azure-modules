@@ -345,7 +345,7 @@ variable "node_version" {
 }
 
 variable "app_settings" {
-  type        = map(string)
+  type        = map(any)
   description = "Map of App Settings. This will be merged with default app settings"
   default     = {}
 }

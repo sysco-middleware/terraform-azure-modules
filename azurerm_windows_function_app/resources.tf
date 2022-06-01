@@ -22,8 +22,8 @@ resource "azurerm_windows_function_app" "wfa" {
 
   # TODO: key_vault_reference_identity_id - (Optional) The User Assigned Identity ID used for accessing KeyVault secrets. The identity must be assigned to the application in the identity block. For more information see - Access vaults with a user-assigned identity
 
-
-  app_settings = local.app_settings
+  # BUG! Overwrites existing configuration settings. This bug Needs to be resolved before using this.
+  #app_settings = var.app_settings_default ? local.app_settings : null
 
   dynamic "auth_settings" {
     for_each = length(var.auth_settings) > 0 ? var.auth_settings : []
@@ -110,8 +110,8 @@ resource "azurerm_windows_function_app" "wfa" {
     worker_count           = var.worker_count
     managed_pipeline_mode  = var.managed_pipeline_mode
     minimum_tls_version    = var.minimum_tls_version
+    pre_warmed_instance_count = var.warmed_count
 
-    # TODO: pre_warmed_instance_count - (Optional) The number of pre-warmed instances for this Windows Function App. Only affects apps on an Elastic Premium plan.
     # TODO: remote_debugging_enabled - (Optional) Should Remote Debugging be enabled. Defaults to false.
     # TODO: remote_debugging_version - (Optional) The Remote Debugging Version. Possible values include VS2017 and VS2019.
     # TODO: runtime_scale_monitoring_enabled - (Optional) Should Scale Monitoring of the Functions Runtime be enabled?
@@ -138,6 +138,6 @@ resource "azurerm_windows_function_app" "wfa" {
   }
 
   lifecycle {
-    ignore_changes = [tags, location, app_settings, storage_account_access_key]
+    ignore_changes = [tags, location, storage_account_access_key] # app_settings,  Bug! needs to fixed
   }
 }

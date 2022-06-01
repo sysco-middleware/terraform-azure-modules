@@ -178,6 +178,13 @@ variable "https_only" {
   description = "Can the App Service only be accessed via HTTPS?"
   default     = false
 }
+
+variable "warmed_count" {
+  type        = number
+  description = "(Optional) The number of pre-warmed instances for this Windows Function App. Only affects apps on an Elastic Premium plan."
+  default     = 1
+}
+
 variable "worker_count" {
   type        = number
   description = "(Optional) The number of Workers (instances) to be allocated."
@@ -249,11 +256,18 @@ variable "use_custom_runtime" {
   default     = null
 }
 
+variable "app_settings_default" {
+  type = bool
+  description = "BUGFIX: Won't reset app_settings values. This sould be enabled only when creating resource for the first."
+  default = false
+}
+
 variable "app_settings" {
-  type        = map(string)
-  description = "Map of App Settings. This will be merged with default app settings"
+  type        = map(any)
+  description = "Map of App Settings. This will be merged with default app settings. https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings."
   default     = {}
 }
+
 variable "app_insights" {
   type = object({
     enabled             = bool
