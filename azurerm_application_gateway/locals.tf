@@ -1,6 +1,6 @@
 
 locals {
-  uai_name               = "${var.name}-uai"
+  uai_name               = "${var.name}-umi"
   ssl_disabled_protocols = var.ssl_policy.name != null || var.ssl_policy.name != null ? null : var.ssl_policy.disabled_tls
   ssl_policy_name        = var.ssl_policy.type == "Predefined" && var.ssl_policy.name == null ? "Default" : var.ssl_policy.name
   is_sku_tier_v2         = can(regex("Standard_v2|WAF_v2", var.tier)) ? true : false
