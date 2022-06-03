@@ -5,7 +5,7 @@
 ### Module info
 ---
 
-`app_settimgs` https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings
+`app_settimgs` https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings        
 
 
 #### ERROR

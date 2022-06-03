@@ -25,9 +25,9 @@ Error: creating Windows Virtual Machine: (Name "*" / Resource Group "*"): comput
 https://docs.microsoft.com/en-us/azure/virtual-machines/linux/disks-enable-host-based-encryption-cli
 
 ```powershell
-az feature show --namespace Microsoft.Compute --name EncryptionAtHost --subscription aof-it-sec-sub
+az feature show --namespace Microsoft.Compute --name EncryptionAtHost --subscription *
 
-az feature register --namespace Microsoft.Compute --name EncryptionAtHost --subscription aof-it-sec-sub
+az feature register --namespace Microsoft.Compute --name EncryptionAtHost --subscription *
 
 # Once the feature 'EncryptionAtHost' is registered, invoking 'az provider register -n Microsoft.Compute' is required to get the change propagated
 ```

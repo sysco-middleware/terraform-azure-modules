@@ -1,5 +1,6 @@
 resource "azurerm_user_assigned_identity" "uai" {
   depends_on = [data.azurerm_resource_group.rg]
+  count = local.is_sku_tier_v2 ? 1 : 0
 
   name                = local.uai_name
   resource_group_name = data.azurerm_resource_group.rg.name
@@ -11,6 +12,7 @@ resource "azurerm_user_assigned_identity" "uai" {
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_gateway
+# https://docs.microsoft.com/en-us/azure/developer/terraform/deploy-application-gateway-v2?toc=%2Fazure%2Fapplication-gateway%2Ftoc.json&bc=%2Fazure%2Fapplication-gateway%2Fbreadcrumb%2Ftoc.json
 resource "azurerm_application_gateway" "agw" {
   depends_on = [azurerm_user_assigned_identity.uai]
 
@@ -27,6 +29,16 @@ resource "azurerm_application_gateway" "agw" {
     name     = var.sku
     tier     = var.tier
     capacity = var.autoscale.enabled ? null : var.capacity
+  }
+
+  # Identity for the selected SKU tier Standard. Supported SKU tiers are Standard_v2,WAF_v2
+  dynamic "identity" {
+    for_each = local.is_sku_tier_v2 ? [1] : []
+
+    content {
+      type         = "UserAssigned" # (Optional) The Managed Service Identity Type of this Application Gateway. The only possible value is UserAssigned. Defaults to UserAssigned
+      identity_ids = concat([azurerm_user_assigned_identity.uai[0].id], var.managed_identity_ids)
+    }
   }
 
   dynamic "autoscale_configuration" {
@@ -241,21 +253,39 @@ resource "azurerm_application_gateway" "agw" {
       redirect_configuration_name = each.value.redirect_conf
       rewrite_rule_set_name       = each.value.rewrite_rule_set
       url_path_map_name           = each.value.url_path_map_name
-      priority                    = each.value.priority
+      priority                    = local.is_sku_tier_v2 ? each.value.priority : null
     }
   }
 
   waf_configuration {
-    enabled          = can(regex(var.tier, "WAF")) ? true : false
-    firewall_mode    = "Detection"
-    rule_set_version = "3.0"
-  }
+    enabled          = local.is_waf ? true : false
+    firewall_mode    = var.waf.firewall_mode
+    rule_set_version = var.waf.rule_set_version
+    rule_set_type    = "OWASP" # (Required) The Type of the Rule Set used for this Web Application Firewall. Currently, only OWASP is supported.
+    request_body_check = var.waf.request_body_check
+    max_request_body_size_kb = 128 # (Optional) The Maximum Request Body Size in KB. Accepted values are in the range 1KB to 128KB. Defaults to 128KB.
 
-  # Identity for the selected SKU tier Standard. Supported SKU tiers are Standard_v2,WAF_v2
-  #identity {
-  #  type         = "UserAssigned" #  (Optional) The Managed Service Identity Type of this Application Gateway. The only possible value is UserAssigned. Defaults to UserAssigned
-  #  identity_ids = concat([azurerm_user_assigned_identity.uai.id], var.managed_identity_ids)
-  #}
+    dynamic "disabled_rule_group" {
+      for_each = length(var.waf.disabled_rule_group) > 0 ? var.waf.disabled_rule_group : []
+      iterator = each
+
+      content {
+        rule_group_name = each.value.name
+        rules = each.value.rules
+      }
+    }
+
+    dynamic "exclusion" {
+      for_each = length(var.waf.exclusion ) > 0 ? var.waf.exclusion  : []
+      iterator = each
+
+      content {
+        match_variable = each.value.match_variable
+        selector_match_operator = each.value.selector_match_operator
+        selector = each.value.selector
+      }
+    }
+  }
 
   ssl_policy {
     policy_name          = local.ssl_policy_name
