@@ -1,6 +1,6 @@
 resource "azurerm_user_assigned_identity" "uai" {
   depends_on = [data.azurerm_resource_group.rg]
-  count = local.is_sku_tier_v2 ? 1 : 0
+  count      = local.is_sku_tier_v2 ? 1 : 0
 
   name                = local.uai_name
   resource_group_name = data.azurerm_resource_group.rg.name
@@ -258,11 +258,11 @@ resource "azurerm_application_gateway" "agw" {
   }
 
   waf_configuration {
-    enabled          = local.is_waf ? true : false
-    firewall_mode    = var.waf.firewall_mode
-    rule_set_version = var.waf.rule_set_version
-    rule_set_type    = "OWASP" # (Required) The Type of the Rule Set used for this Web Application Firewall. Currently, only OWASP is supported.
-    request_body_check = var.waf.request_body_check
+    enabled                  = local.is_waf ? true : false
+    firewall_mode            = var.waf.firewall_mode
+    rule_set_version         = var.waf.rule_set_version
+    rule_set_type            = "OWASP" # (Required) The Type of the Rule Set used for this Web Application Firewall. Currently, only OWASP is supported.
+    request_body_check       = var.waf.request_body_check
     max_request_body_size_kb = 128 # (Optional) The Maximum Request Body Size in KB. Accepted values are in the range 1KB to 128KB. Defaults to 128KB.
 
     dynamic "disabled_rule_group" {
@@ -271,18 +271,18 @@ resource "azurerm_application_gateway" "agw" {
 
       content {
         rule_group_name = each.value.name
-        rules = each.value.rules
+        rules           = each.value.rules
       }
     }
 
     dynamic "exclusion" {
-      for_each = length(var.waf.exclusion ) > 0 ? var.waf.exclusion  : []
+      for_each = length(var.waf.exclusion) > 0 ? var.waf.exclusion : []
       iterator = each
 
       content {
-        match_variable = each.value.match_variable
+        match_variable          = each.value.match_variable
         selector_match_operator = each.value.selector_match_operator
-        selector = each.value.selector
+        selector                = each.value.selector
       }
     }
   }

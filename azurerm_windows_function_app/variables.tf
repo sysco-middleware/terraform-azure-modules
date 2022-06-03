@@ -257,9 +257,9 @@ variable "use_custom_runtime" {
 }
 
 variable "app_settings_default" {
-  type = bool
+  type        = bool
   description = "BUGFIX: Won't reset app_settings values. This sould be enabled only when creating resource for the first."
-  default = false
+  default     = false
 }
 
 variable "app_settings" {

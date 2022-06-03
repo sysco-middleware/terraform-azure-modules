@@ -7,9 +7,9 @@ terraform {
 variable "name" {}
 variable "rg_name" {}
 variable "kv_id" {
-  type = string
+  type        = string
   description = ""
-  default = null
+  default     = null
 }
 variable "tier" {
   type        = string
@@ -318,24 +318,24 @@ variable "ssl_certificate" {
 
 variable "waf" {
   type = object({
-    firewall_mode        = string # (Required) The Web Application Firewall Mode. Possible values are Detection and Prevention.
-    rule_set_version     = string # (Required) The Version of the Rule Set used for this Web Application Firewall. Possible values are 2.2.9, 3.0, 3.1, and 3.2.
+    firewall_mode        = string           # (Required) The Web Application Firewall Mode. Possible values are Detection and Prevention.
+    rule_set_version     = string           # (Required) The Version of the Rule Set used for this Web Application Firewall. Possible values are 2.2.9, 3.0, 3.1, and 3.2.
     file_upload_limit_mb = optional(number) # (Optional) The File Upload Limit in MB. Accepted values are in the range 1MB to 750MB for the WAF_v2 SKU, and 1MB to 500MB for all other SKUs. Defaults to 100MB.
-    request_body_check   = optional(bool) # (Optional) Is Request Body Inspection enabled? Defaults to true
-    
+    request_body_check   = optional(bool)   # (Optional) Is Request Body Inspection enabled? Defaults to true
+
     disabled_rule_group = list(object({
       name  = string
       rules = list(string)
     }))
 
     exclusion = list(object({
-      match_variable = string # (Required) Match variable of the exclusion rule to exclude header, cookie or GET arguments. Possible values are RequestHeaderNames, RequestArgNames and RequestCookieNames
+      match_variable          = string           # (Required) Match variable of the exclusion rule to exclude header, cookie or GET arguments. Possible values are RequestHeaderNames, RequestArgNames and RequestCookieNames
       selector_match_operator = optional(string) # (Optional) Operator which will be used to search in the variable content. Possible values are Equals, StartsWith, EndsWith, Contains. If empty will exclude all traffic on this match_variable
-      selector = optional(string) # (Optional) String value which will be used for the filter operation. If empty will exclude all traffic on this match_variable
+      selector                = optional(string) # (Optional) String value which will be used for the filter operation. If empty will exclude all traffic on this match_variable
     }))
   })
   description = "Web Application Firewall configuration. This is applied if tier is using WAF or WAF_2. Defaults: firewall_mode=Detection, rule_set_version=3.1."
-  default     = {
+  default = {
     firewall_mode        = "Detection"
     rule_set_version     = "3.1"
     disabled_rule_group  = []
@@ -344,7 +344,7 @@ variable "waf" {
     exclusion            = []
   }
   validation {
-    condition     = can(regex("Detection|Prevention",var.waf.firewall_mode)) && can(regex("2.2.9|3.0|3.1|3.2",var.waf.rule_set_version)) && var.waf.file_upload_limit_mb > 0 && var.waf.file_upload_limit_mb <= 750
+    condition     = can(regex("Detection|Prevention", var.waf.firewall_mode)) && can(regex("2.2.9|3.0|3.1|3.2", var.waf.rule_set_version)) && var.waf.file_upload_limit_mb > 0 && var.waf.file_upload_limit_mb <= 750
     error_message = "Variable 'waf' must have property firewall_mode:Detection|Prevention and rule_set_version:2.2.9|3.0|3.1|3.2 and file_upload_limit_mb:1-750."
   }
 }

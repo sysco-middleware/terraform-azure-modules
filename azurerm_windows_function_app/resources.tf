@@ -100,16 +100,16 @@ resource "azurerm_windows_function_app" "wfa" {
       }
     }
 
-    health_check_path      = var.health_check_path
-    websockets_enabled     = var.websockets_enabled
-    http2_enabled          = var.http2_enabled
-    use_32_bit_worker      = var.use_32_bit_worker
-    vnet_route_all_enabled = var.vnet_route_all_enabled
-    ftps_state             = var.ftps_state
-    ip_restriction         = var.ip_restrictions
-    worker_count           = var.worker_count
-    managed_pipeline_mode  = var.managed_pipeline_mode
-    minimum_tls_version    = var.minimum_tls_version
+    health_check_path         = var.health_check_path
+    websockets_enabled        = var.websockets_enabled
+    http2_enabled             = var.http2_enabled
+    use_32_bit_worker         = var.use_32_bit_worker
+    vnet_route_all_enabled    = var.vnet_route_all_enabled
+    ftps_state                = var.ftps_state
+    ip_restriction            = var.ip_restrictions
+    worker_count              = var.worker_count
+    managed_pipeline_mode     = var.managed_pipeline_mode
+    minimum_tls_version       = var.minimum_tls_version
     pre_warmed_instance_count = var.warmed_count
 
     # TODO: remote_debugging_enabled - (Optional) Should Remote Debugging be enabled. Defaults to false.
