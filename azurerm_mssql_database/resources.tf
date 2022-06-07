@@ -93,7 +93,7 @@ resource "mssql_login" "sql_login" {
 
 # https://registry.terraform.io/providers/betr-io/mssql/latest/docs/resources/user
 resource "mssql_user" "db_user" {
-  depends_on = [mssql_login.sql_login]
+  depends_on = [mssql_login.sql_login, azurerm_mssql_database.db]
   count      = length(local.databases_cur)
 
   server {
