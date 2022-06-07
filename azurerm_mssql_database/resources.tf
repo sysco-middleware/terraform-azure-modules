@@ -67,7 +67,7 @@ resource "azurerm_mssql_database_extended_auditing_policy" "policy" {
 ## TODO:  Error: unable to update login [*]: db connection failed after 30s timeout
 resource "mssql_login" "sql_login" {
   depends_on = [data.azurerm_mssql_server.sql]
-  count      = length(var.databases)
+  count      = length(var.databases_cur)
   server {
     host = local.host
     port = 1433
@@ -81,10 +81,10 @@ resource "mssql_login" "sql_login" {
       client_secret = var.client_secret
     }
   }
-  login_name       = var.sqlserver.login_name
-  password         = var.sqlserver.password
-  default_database = local.default_database
-  default_language = local.default_language
+  login_name       = local.databases_cur[count.index].username
+  password         = local.databases_cur[count.index].password
+  default_database = local.databases_cur[count.index].database
+  default_language = local.databases_cur[count.index].default_language
 
   lifecycle {
     ignore_changes = [login_name]
