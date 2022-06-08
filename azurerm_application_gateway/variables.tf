@@ -275,7 +275,7 @@ variable "probes" {
     timeout             = number           # (Required) The Timeout used for this Probe, which indicates when a probe becomes unhealthy. Possible values range from 1 second to a maximum of 86,400 seconds.
     unhealthy_threshold = optional(number) # (Optional) Whether the host header should be picked from the backend HTTP settings. Defaults to false.
     min_servers         = optional(number) # (Optional) The minimum number of servers that are always marked as healthy. Defaults to 0.
-    match = list(object({
+    match = optional(object({
       status_code = string # (Required) Status code of the application gateway customer error. Possible values are HttpStatus403 and HttpStatus502
       body        = string # (Required) Error page URL of the application gateway customer error.
     }))
