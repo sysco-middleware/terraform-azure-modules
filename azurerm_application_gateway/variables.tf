@@ -241,7 +241,7 @@ variable "url_path_maps" {
       name             = string           # (Required) The Name of the Path Rule.
       paths            = list(string)     # (Required) A list of Paths used in this Path Rule.
       be_address_pool  = optional(string) # (Optional) The Name of the Backend Address Pool to use for this Path Rule. Cannot be set if redirect_configuration_name is set.
-      be_setting       = optional(string) # (Optional) The Name of the Backend HTTP Settings Collection to use for this Path Rule. Cannot be set if redirect_configuration_name is set.
+      be_setting       = optional(string) # (Optional/Required) The Name of the Backend HTTP Settings Collection to use for this Path Rule. Cannot be set if redirect_configuration_name is set.
       redirect_conf    = optional(string) # (Optional) The Name of a Redirect Configuration to use for this Path Rule. Cannot be set if backend_address_pool_name or backend_http_settings_name is set.
       rewrite_rule_set = optional(string) # (Optional) The Name of the Rewrite Rule Set which should be used for this URL Path Map. Only valid for v2 SKUs.
       fw_policy_id     = optional(string) # (Optional) The ID of the Web Application Firewall Policy which should be used as a HTTP Listener.
@@ -249,6 +249,7 @@ variable "url_path_maps" {
 
   }))
   description = "url_path_maps must be defined if request_routing_rules.rule_type is PathBasedRouting."
+  default = []
 }
 
 variable "request_routing_rules" {
@@ -260,7 +261,7 @@ variable "request_routing_rules" {
     be_setting        = optional(string) # (Optional/Required) The Name of the Backend HTTP Settings Collection which should be used for this Routing Rule. Cannot be set if redirect_configuration_name is set.
     redirect_conf     = optional(string) # (Optional) The Name of the Redirect Configuration which should be used for this Routing Rule. Cannot be set if either backend_address_pool_name or backend_http_settings_name is set.
     rewrite_rule_set  = optional(string) # (Optional) The Name of the Rewrite Rule Set which should be used for this Routing Rule. Only valid for v2 SKUs.
-    url_path_map_name = optional(string) # (Optional) The Name of the URL Path Map which should be associated with this Routing Rule.
+    url_path_map_name = optional(string) # (Optional/Required) The Name of the URL Path Map which should be associated with this Routing Rule. Required if rule_type is PathBasedRouting.
     priority          = number           # (Required) Rule evaluation order can be dictated by specifying an integer value from 1 to 20000 with 1 being the highest priority and 20000 being the lowest priority.
   }))
   description = ""
