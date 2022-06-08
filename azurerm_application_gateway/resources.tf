@@ -323,9 +323,13 @@ resource "azurerm_application_gateway" "agw" {
       pick_host_name_from_backend_http_settings = each.value.phnfbts
       minimum_servers                           = each.value.min_servers
 
-      match {
-        status_code = each.value.match.status_code
-        body        = each.value.match.body
+      dynamic "match" {
+        for_each = each.value.match == null ? [] : [1]
+
+        content {
+          status_code = each.value.match.status_code
+          body        = each.value.match.body
+        }
       }
     }
   }
