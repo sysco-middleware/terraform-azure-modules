@@ -232,14 +232,14 @@ variable "http_listeners" {
 
 variable "url_path_maps" {
   type = list(object({
-    name             = string           # (Required) The Name of the URL Path Map.
-    be_address_pool  = optional(string) # (Optional) The Name of the Default Backend Address Pool which should be used for this URL Path Map. Cannot be set if default_redirect_configuration_name is set.
-    be_setting       = optional(string) # (Optional) The Name of the Default Backend HTTP Settings Collection which should be used for this URL Path Map. Cannot be set if default_redirect_configuration_name is set.
-    redirect_conf    = optional(string) # (Optional) The Name of the Default Redirect Configuration which should be used for this URL Path Map. Cannot be set if either default_backend_address_pool_name or default_backend_http_settings_name is set.
-    rewrite_rule_set = optional(string) # (Optional) The Name of the Default Rewrite Rule Set which should be used for this URL Path Map. Only valid for v2 SKUs.
-    path_rule = list(object({
+    name                 = string           # (Required) The Name of the URL Path Map.
+    def_be_address_pool  = optional(string) # (Optional) The Name of the Default Backend Address Pool which should be used for this URL Path Map. Cannot be set if default_redirect_configuration_name is set.
+    def_be_setting       = optional(string) # (Optional) The Name of the Default Backend HTTP Settings Collection which should be used for this URL Path Map. Cannot be set if default_redirect_configuration_name is set.
+    def_redirect_conf    = optional(string) # (Optional) The Name of the Default Redirect Configuration which should be used for this URL Path Map. Cannot be set if either default_backend_address_pool_name or default_backend_http_settings_name is set.
+    def_rewrite_rule_set = optional(string) # (Optional) The Name of the Default Rewrite Rule Set which should be used for this URL Path Map. Only valid for v2 SKUs.
+    path_rules = list(object({
       name             = string           # (Required) The Name of the Path Rule.
-      paths            = string           # (Required) A list of Paths used in this Path Rule.
+      paths            = list(string)     # (Required) A list of Paths used in this Path Rule.
       be_address_pool  = optional(string) # (Optional) The Name of the Backend Address Pool to use for this Path Rule. Cannot be set if redirect_configuration_name is set.
       be_setting       = optional(string) # (Optional) The Name of the Backend HTTP Settings Collection to use for this Path Rule. Cannot be set if redirect_configuration_name is set.
       redirect_conf    = optional(string) # (Optional) The Name of a Redirect Configuration to use for this Path Rule. Cannot be set if backend_address_pool_name or backend_http_settings_name is set.
