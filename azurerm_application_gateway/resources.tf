@@ -248,12 +248,12 @@ resource "azurerm_application_gateway" "agw" {
       name                        = each.value.name
       rule_type                   = each.value.rule_type
       http_listener_name          = each.value.listener_name
-      backend_address_pool_name   = each.value.be_address_pool
-      backend_http_settings_name  = each.value.be_setting
-      redirect_configuration_name = each.value.redirect_conf
-      rewrite_rule_set_name       = each.value.rewrite_rule_set
+      backend_address_pool_name   = each.value.rule_type == "Basic" && each.value.redirect_conf != null ? each.value.be_address_pool : null
+      backend_http_settings_name  = each.value.rule_type == "Basic" && each.value.redirect_conf != null ? each.value.be_setting : null
+      redirect_configuration_name = each.value.rule_type == "Basic" ? each.value.redirect_conf : null
+      rewrite_rule_set_name       = local.is_sku_tier_v2 && each.value.rule_type == "Basic" ? each.value.rewrite_rule_set : null
       url_path_map_name           = each.value.url_path_map_name
-      priority                    = local.is_sku_tier_v2 ? each.value.priority : null
+      priority                    = each.value.priority
     }
   }
 
