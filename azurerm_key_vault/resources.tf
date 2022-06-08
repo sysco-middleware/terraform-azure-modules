@@ -58,55 +58,25 @@ resource "azurerm_key_vault" "kv" {
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault
-resource "azurerm_key_vault_access_policy" "change" {
+resource "azurerm_key_vault_access_policy" "policy" {
   depends_on = [azurerm_key_vault.kv]
-  count      = var.enable_rbac_authorization ? 0 : length(var.object_ids)
+  count      = var.enable_rbac_authorization ? 0 : length(local.access_policies)
 
-  key_vault_id = azurerm_key_vault.kv.id
-  tenant_id    = var.tenant_id
-  object_id    = var.object_ids[count.index] #data.azuread_client_config.current.object_id
+  key_vault_id            = azurerm_key_vault.kv.id
+  tenant_id               = var.tenant_id
+  object_id               = local.access_policies[count.index].object_id
+  key_permissions         = local.access_policies[count.index].key_permissions
+  secret_permissions      = local.access_policies[count.index].secret_permissions
+  storage_permissions     = local.is_premium ? local.access_policies[count.index].storage_permissions : []
+  certificate_permissions = local.access_policies[count.index].certificate_permissions
 
-  key_permissions = [
-    "Create", "Get", "Purge", "Recover", "List", "Delete", "Update", "Backup", "Restore"
-  ]
-
-  secret_permissions = [
-    "Get", "List", "Set", "Delete", "Purge", "Recover", "Backup", "Restore"
-  ]
-
-  /* If Sku is Premium
-  storage_permissions = [
-    "Backup",
-    "Delete",
-    "Get",
-    "List",
-    "Restore",
-    "Update",
-    "Recover",
-    "RegenerateKey"
-  ]*/
-
-  certificate_permissions = [
-    "Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Purge", "Recover", "Restore", "SetIssuers", "Update"
-  ]
-
-  #lifecycle {
-  #  ignore_changes = [key_vault_id, object_id] # Must have this or else the resource will be replaced
-  #}
-}
-
-
-resource "azurerm_role_assignment" "role" {
-  depends_on = [azurerm_key_vault.kv]
-  count      = var.enable_rbac_authorization ? length(var.rbac_roles) : 0
-
-  scope                = azurerm_key_vault.kv.id
-  role_definition_name = var.rbac_roles[count.index].role_definition_name
-  principal_id         = var.rbac_roles[count.index].principal_id
+  lifecycle {
+    ignore_changes = [key_vault_id, object_id] # Must have this or else the resource will be replaced
+  }
 }
 
 resource "azurerm_key_vault_secret" "secret" {
-  depends_on = [azurerm_key_vault_access_policy.change, azurerm_role_assignment.role]
+  depends_on = [azurerm_key_vault_access_policy.policy, azurerm_role_assignment.role]
   count      = length(var.secrets)
 
   key_vault_id = azurerm_key_vault.kv.id
@@ -116,7 +86,7 @@ resource "azurerm_key_vault_secret" "secret" {
 }
 
 resource "azurerm_key_vault_key" "key" {
-  depends_on = [azurerm_key_vault_access_policy.change, azurerm_role_assignment.role]
+  depends_on = [azurerm_key_vault_access_policy.policy, azurerm_role_assignment.role]
   count      = length(var.keys)
 
   key_vault_id = azurerm_key_vault.kv.id
@@ -130,64 +100,27 @@ resource "azurerm_key_vault_key" "key" {
   }
 }
 
-/*
+resource "azurerm_key_vault_certificate" "cert" {
+  depends_on = [azurerm_key_vault_access_policy.policy, azurerm_role_assignment.role]
+  count      = length(var.certificates_pfx)
 
-resource "azurerm_key_vault_certificate" "cert_self" {
-  depends_on = [azurerm_key_vault_access_policy.change, azurerm_role_assignment.role]
-  count      = length(var.certificates)
-
-  name         = var.certificates[count.index].name
+  name         = var.certificates_pfx[count.index].name
   key_vault_id = azurerm_key_vault.kv.id
 
-  certificate_policy {
-    issuer_parameters {
-      name = "Self"
-    }
-
-    key_properties {
-      exportable = true
-      key_size   = 2048
-      key_type   = "RSA"
-      reuse_key  = true
-    }
-
-    lifetime_action {
-      action {
-        action_type = "AutoRenew"
-      }
-
-      trigger {
-        days_before_expiry = 30
-      }
-    }
-
-    secret_properties {
-      content_type = "application/x-pkcs12"
-    }
-
-    x509_certificate_properties {
-      extended_key_usage = length(local.extended_key_usage) == 0 ? null : local.extended_key_usage 
-
-      key_usage = [
-        "cRLSign",
-        "dataEncipherment",
-        "digitalSignature",
-        "keyAgreement",
-        "keyCertSign",
-        "keyEncipherment",
-      ]
-
-      subject_alternative_names {
-        dns_names = var.certificates[count.index].dns_names
-      }
-
-      subject            = var.certificates[count.index].subject
-      validity_in_months = var.certificates[count.index].validity_in_months
-    }
+  certificate {
+    contents = filebase64(var.certificates_pfx[count.index].pfx_file)
+    password = var.certificates_pfx[count.index].password
   }
 }
 
-*/
+resource "azurerm_role_assignment" "role" {
+  depends_on = [azurerm_key_vault.kv]
+  count      = var.enable_rbac_authorization ? length(var.rbac_roles) : 0
+
+  scope                = azurerm_key_vault.kv.id
+  role_definition_name = var.rbac_roles[count.index].role_definition_name
+  principal_id         = var.rbac_roles[count.index].principal_id
+}
 
 resource "azurerm_management_lock" "kv_lock" {
   depends_on = [azurerm_key_vault.kv]

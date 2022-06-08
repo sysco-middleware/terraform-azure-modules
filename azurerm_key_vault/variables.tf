@@ -8,8 +8,12 @@ variable "lock_resource" {
 variable "rg_name" {}
 variable "sku_name" {
   type        = string
-  description = ""
-  default     = ""
+  description = "(Required) The Name of the SKU used for this Key Vault. Possible values are standard and premium."
+  default     = "standard"
+  validation {
+    condition     = can(regex("^standard$|^premium$", var.sku_name))
+    error_message = "The variable 'sku_name' must have valid default_action: 'standard', 'premium' ."
+  }
 }
 variable "soft_delete_retention_days" {
   type        = number
@@ -26,17 +30,34 @@ variable "enable_rbac_authorization" {
   description = "Activates RBAC on the resource"
   default     = false
 }
-variable "object_ids" {
-  type        = list(string)
-  description = "The object ids for Access Policies"
-  default     = []
-}
 variable "rbac_roles" {
   type = list(object({
     role_definition_name = string
     principal_id         = string
   }))
   description = "Role definition name to give access to, ex: Key Vault Administrator. Note: var.enable_rbac_authorization must be true"
+  default     = []
+}
+variable "access_policies" {
+  type = list(object({
+    object_id               = string       # (Required) The object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies.
+    key_permissions         = list(string) # "Create", "Get", "Purge", "Recover", "List", "Delete", "Update", "Backup", "Restore"
+    secret_permissions      = list(string) # "Get", "List", "Set", "Delete", "Purge", "Recover", "Backup", "Restore"
+    certificate_permissions = list(string) # "Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Purge", "Recover", "Restore", "SetIssuers", "Update"
+    storage_permissions     = list(string) # "Backup", "Delete","Get","List","Restore","Update","Recover","RegenerateKey". Is ignored if sku is premium. 
+  }))
+  description = "The Access Policies. This is ignored if variable 'enable_rbac_authorization' is true."
+  default     = []
+}
+variable "access_policies_rbac" {
+  type = list(object({
+    object_id        = string # (Required) The object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies.
+    key_role         = string # Owner, Contributor, Reader
+    secret_role      = string # Owner, Contributor, Reader
+    certificate_role = string # Owner, Contributor, Reader
+    storage_role     = string # Owner, Contributor, Reader. Is ignored if sku is premium. 
+  }))
+  description = "Predifined Access Policy permissions using RBAC definition names. This is ignored if variable 'enable_rbac_authorization' is true."
   default     = []
 }
 variable "recover_keyvault" {
@@ -61,6 +82,15 @@ variable "keys" {
     key_opts = list(string) # If empty the all rights are added
   }))
   description = "A list of Key Vault Keys."
+  default     = []
+}
+variable "certificates_pfx" {
+  type = list(object({
+    name     = string
+    pfx_file = string
+    password = string
+  }))
+  description = "A list of Key Vault PFX certificates"
   default     = []
 }
 variable "network_acls" {

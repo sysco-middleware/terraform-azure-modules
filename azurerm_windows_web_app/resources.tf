@@ -17,7 +17,8 @@ resource "azurerm_windows_web_app" "wwa" {
 
   # TODO: key_vault_reference_identity_id - (Optional) The User Assigned Identity ID used for accessing KeyVault secrets. The identity must be assigned to the application in the identity block. For more information see - Access vaults with a user-assigned identity
 
-  app_settings = local.app_settings
+  # https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings
+  #app_settings = local.app_settings
 
   dynamic "auth_settings" {
     for_each = length(var.auth_settings) > 0 ? var.auth_settings : []
