@@ -7,7 +7,7 @@ locals {
   is_premium = var.sku_name == "premium" ? true : false
 
   permissions = {
-    owner = {
+    Owner = {
       key_permissions         = ["Create", "Get", "Purge", "Recover", "List", "Delete", "Update", "Backup", "Restore"]
       secret_permissions      = ["Get", "List", "Set", "Delete", "Purge", "Recover", "Backup", "Restore"]
       certificate_permissions = ["Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Purge", "Recover", "Restore", "SetIssuers", "Update"]
@@ -30,11 +30,13 @@ locals {
   access_policies_rbac = [
     for item in var.access_policies_rbac :
     {
+      object_id               = item.object_id
       key_permissions         = local.permissions[item.key_role].key_permissions
       secret_permissions      = local.permissions[item.secret_role].secret_permissions
       certificate_permissions = local.permissions[item.certificate_role].certificate_permissions
       storage_permissions     = local.permissions[item.storage_role].storage_permissions
     }
   ]
+
   access_policies = length(local.access_policies_rbac) > 0 ? local.access_policies_rbac : var.access_policies
 }
