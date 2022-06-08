@@ -313,7 +313,7 @@ resource "azurerm_application_gateway" "agw" {
 
     content {
       name                                      = each.value.name
-      host                                      = each.value.phnfbts ? null : each.value.host
+      host                                      = each.value.phnfbts == false || each.value.phnfbts == null ? each.value.host : null
       protocol                                  = each.value.protocol
       path                                      = each.value.path
       port                                      = each.value.port
