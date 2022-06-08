@@ -148,7 +148,7 @@ resource "azurerm_application_gateway" "agw" {
 
         content {
           enabled           = each.value.connection_draining.enabled
-          drain_timeout_sec = each.value.connection_draining.drain_timeout_sec
+          drain_timeout_sec = each.value.connection_draining.timeout_sec
         }
       }
     }
