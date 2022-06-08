@@ -230,6 +230,27 @@ variable "http_listeners" {
   }
 }
 
+variable "url_path_maps" {
+  type = list(object({
+    name             = string           # (Required) The Name of the URL Path Map.
+    be_address_pool  = optional(string) # (Optional) The Name of the Default Backend Address Pool which should be used for this URL Path Map. Cannot be set if default_redirect_configuration_name is set.
+    be_setting       = optional(string) # (Optional) The Name of the Default Backend HTTP Settings Collection which should be used for this URL Path Map. Cannot be set if default_redirect_configuration_name is set.
+    redirect_conf    = optional(string) # (Optional) The Name of the Default Redirect Configuration which should be used for this URL Path Map. Cannot be set if either default_backend_address_pool_name or default_backend_http_settings_name is set.
+    rewrite_rule_set = optional(string) # (Optional) The Name of the Default Rewrite Rule Set which should be used for this URL Path Map. Only valid for v2 SKUs.
+    path_rule = list(object({
+      name             = string           # (Required) The Name of the Path Rule.
+      paths            = string           # (Required) A list of Paths used in this Path Rule.
+      be_address_pool  = optional(string) # (Optional) The Name of the Backend Address Pool to use for this Path Rule. Cannot be set if redirect_configuration_name is set.
+      be_setting       = optional(string) # (Optional) The Name of the Backend HTTP Settings Collection to use for this Path Rule. Cannot be set if redirect_configuration_name is set.
+      redirect_conf    = optional(string) # (Optional) The Name of a Redirect Configuration to use for this Path Rule. Cannot be set if backend_address_pool_name or backend_http_settings_name is set.
+      rewrite_rule_set = optional(string) # (Optional) The Name of the Rewrite Rule Set which should be used for this URL Path Map. Only valid for v2 SKUs.
+      fw_policy_id     = optional(string) # (Optional) The ID of the Web Application Firewall Policy which should be used as a HTTP Listener.
+    }))
+
+  }))
+  description = "url_path_maps must be defined if request_routing_rules.rule_type is PathBasedRouting."
+}
+
 variable "request_routing_rules" {
   type = list(object({
     name              = string           # (Required) The Name of this Request Routing Rule.

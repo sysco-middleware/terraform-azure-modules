@@ -239,6 +239,35 @@ resource "azurerm_application_gateway" "agw" {
     }
   }
 
+  dynamic "url_path_map" {
+    for_each = length(var.url_path_maps) > 0 ? var.url_path_maps : []
+    iterator = each
+
+    content {
+      name                                = each.value.name
+      default_backend_address_pool_name   = each.value.redirect_conf != null ? null : each.value.be_address_pool
+      default_backend_http_settings_name  = each.value.redirect_conf != null ? null : each.value.be_setting
+      default_redirect_configuration_name = each.value.redirect_conf
+      default_rewrite_rule_set_name       = each.value.rewrite_rule_set
+      redirect_configuration_name         = each.value.rule_type == "Basic" ? each.value.redirect_conf : null
+      rewrite_rule_set_name               = local.is_sku_tier_v2 ? each.value.rewrite_rule_set : null
+
+      dynamic "path_rule" {
+        for_each = length(each.value.path_rules) > 0 ? each.value.path_rules : []
+        iterator = eachsub
+
+        content {
+          name                        = eachsub.value.name
+          paths                       = eachsub.value.paths
+          backend_address_pool_name   = eachsub.value.redirect_conf != null ? null : eachsub.value.be_address_pool
+          backend_http_settings_name  = eachsub.value.redirect_conf != null ? null : eachsub.value.be_setting
+          redirect_configuration_name = eachsub.value.redirect_conf
+          rule_set_name               = local.is_sku_tier_v2 ? eachsub.value.rule_set_name : null
+          firewall_policy_id          = eachsub.value.fw_policy_id
+        }
+      }
+    }
+  }
 
   dynamic "request_routing_rule" {
     for_each = length(var.request_routing_rules) > 0 ? var.request_routing_rules : []
