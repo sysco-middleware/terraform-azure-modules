@@ -240,8 +240,8 @@ variable "url_path_maps" {
     path_rules = list(object({
       name             = string           # (Required) The Name of the Path Rule.
       paths            = list(string)     # (Required) A list of Paths used in this Path Rule.
-      be_address_pool  = optional(string) # (Optional) The Name of the Backend Address Pool to use for this Path Rule. Cannot be set if redirect_configuration_name is set.
-      be_setting       = optional(string) # (Optional/Required) The Name of the Backend HTTP Settings Collection to use for this Path Rule. Cannot be set if redirect_configuration_name is set.
+      be_address_pool  = string # (Optional/Required) The Name of the Backend Address Pool to use for this Path Rule. Cannot be set if redirect_configuration_name is set.
+      be_setting       = string # (Optional/Required) The Name of the Backend HTTP Settings Collection to use for this Path Rule. Cannot be set if redirect_configuration_name is set.
       redirect_conf    = optional(string) # (Optional) The Name of a Redirect Configuration to use for this Path Rule. Cannot be set if backend_address_pool_name or backend_http_settings_name is set.
       rewrite_rule_set = optional(string) # (Optional) The Name of the Rewrite Rule Set which should be used for this URL Path Map. Only valid for v2 SKUs.
       fw_policy_id     = optional(string) # (Optional) The ID of the Web Application Firewall Policy which should be used as a HTTP Listener.
