@@ -28,12 +28,12 @@ variable "managed_identity_ids" {
 }
 variable "auth_settings" {
   type = list(object({
-    enabled          = bool
-    default_provider = string
+    enabled          = bool   # (Required) Should the Authentication / Authorization feature be enabled for the Windows Function App?
+    default_provider = string # (Optional) The default authentication provider to use when multiple providers are configured. Possible values include: AzureActiveDirectory, Facebook, Google, MicrosoftAccount, Twitter, Github
     active_directory = object({
-      client_id     = string
-      client_secret = string
-      audiences     = list(string)
+      client_id     = string       # (Required) The ID of the Client to use to authenticate with Azure Active Directory.
+      client_secret = string       # (Optional) The Client Secret for the Client ID. Cannot be used with client_secret_setting_name
+      audiences     = list(string) # (Optional) Specifies a list of Allowed audience values to consider when validating JWTs issued by Azure Active Directory.
     })
   }))
   description = "Authentication Settings"

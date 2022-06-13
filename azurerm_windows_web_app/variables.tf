@@ -302,10 +302,10 @@ variable "current_stack" {
 
 variable "dotnet_version" {
   type        = string
-  description = "Optional) The version of .Net to use when current_stack is set to dotnet. Possible values include v3.0, v4.0, v5.0, and v6.0. If Variable 'current_stack' is dotnetcore the v3.0 or v6.0 can be used."
-  default     = "v3.0"
+  description = "Optional) The version of .Net to use when current_stack is set to dotnet. Possible values include v2.0, v4.0 (Default), v5.0, and v6.0. If Variable 'current_stack' is dotnetcore the v4.0 or v6.0 can be used. 5 and 6 is fore integrated"
+  default     = "v4.0"
   validation {
-    condition     = can(regex("v3\\.0|v4\\.0|v5\\.0|v6\\.0", var.dotnet_version))
+    condition     = can(regex("v2\\.0|v4\\.0|v5\\.0|v6\\.0", var.dotnet_version))
     error_message = "Variable 'dotnet_version' must either be v3.0 (Default), v4.0, v5.0 or v6.0."
   }
 }
