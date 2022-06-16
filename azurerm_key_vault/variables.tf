@@ -58,7 +58,15 @@ variable "access_policies_rbac" {
     storage_role     = string # Owner, Contributor, Reader. Is ignored if sku is premium. 
   }))
   description = "Predifined Access Policy permissions using RBAC definition names. This is ignored if variable 'enable_rbac_authorization' is true."
-  default     = []
+  default     = [
+    {
+      object_id   = null
+      key_role    = "Contributor"
+      secret_role = "Contributor"
+      certificate_role = "Contributor"
+      storage_role = "Reader"
+    }
+  ]
 }
 variable "recover_keyvault" {
   type        = bool

@@ -222,6 +222,7 @@ resource "azurerm_application_gateway" "agw" {
       protocol                       = each.value.protocol
       host_name                      = each.value.host_name
       host_names                     = each.value.host_name == null ? each.value.host_names : null
+      require_sni                    = each.value.require_sni
       ssl_certificate_name           = each.value.ssl_cert_name
       ssl_profile_name               = each.value.ssl_profile_name
       firewall_policy_id             = each.value.fw_policy_id

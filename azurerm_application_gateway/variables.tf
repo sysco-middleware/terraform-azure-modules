@@ -211,9 +211,10 @@ variable "http_listeners" {
     name             = string                 # (Required) The Name of the HTTP Listener.
     fe_ip_conf_name  = string                 # (Required) The Name of the Frontend IP Configuration used for this HTTP Listener.
     fe_port_name     = string                 # (Required) The Name of the Frontend Port use for this HTTP Listener.
-    host_name        = optional(string)       # (Optional) The Hostname which should be used for this HTTP Listener. Setting this value changes Listener Type to 'Multi site'.
-    host_names       = optional(list(string)) # (Optional) A list of Hostname(s) should be used for this HTTP Listener. It allows special wildcard characters.
+    host_name        = optional(string)       # (Optional) The host_names and host_name are mutually exclusive and cannot both be set. The Hostname which should be used for this HTTP Listener. Setting this value changes Listener Type to 'Multi site'.
+    host_names       = optional(list(string)) # (Optional) The host_names and host_name are mutually exclusive and cannot both be set. A list of Hostname(s) should be used for this HTTP Listener. It allows special wildcard characters.
     protocol         = string                 # (Required) The Protocol to use for this HTTP Listener. Possible values are Http and Https. Https requires Ssl Certificate must be specified
+    require_sni      = optional(bool)         # (Optional) Should Server Name Indication be Required? Defaults to false.
     ssl_cert_name    = optional(string)       # (Optional) The name of the associated SSL Certificate which should be used for this HTTP Listener.
     ssl_profile_name = optional(string)       # (Optional) The name of the associated SSL Profile which should be used for this HTTP Listener.
     fw_policy_id     = optional(string)       # (Optional) The ID of the Web Application Firewall Policy which should be used for this HTTP Listener.
@@ -299,8 +300,8 @@ variable "probes" {
     min_servers         = optional(number) # (Optional) The minimum number of servers that are always marked as healthy. Defaults to 0.
     phnfbts             = optional(bool)   # (Optional) Whether the host header should be picked from the backend HTTP settings. Defaults to false.
     match = optional(object({
-      status_code = string # (Required) Status code of the application gateway customer error. Possible values are HttpStatus403 and HttpStatus502
-      body        = string # (Required) Error page URL of the application gateway customer error.
+      status_code = list(string) # (Required) A list of allowed status codes for this Health Probe.
+      body        = string # (Required) A snippet from the Response Body which must be present in the Response.
     }))
   }))
   description = ""
@@ -328,7 +329,7 @@ variable "ssl_policy" {
 variable "ssl_certificate" {
   type = object({
     name         = string           # (Required) The Name of the SSL certificate that is unique within this Application Gateway
-    data         = optional(string) #  (Optional) PFX certificate. Required if key_vault_secret_id is not set.
+    data         = optional(string) # (Optional) PFX certificate. Required if key_vault_secret_id is not set.
     password     = optional(string) # (Optional) Password for the pfx file specified in data. Required if data is set.
     kv_secret_id = optional(string) # (Optional) Secret Id of (base-64 encoded unencrypted pfx) Secret or Certificate object stored in Azure KeyVault. You need to enable soft delete for keyvault to use this feature. Required if data is not set
   })
