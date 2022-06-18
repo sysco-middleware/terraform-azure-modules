@@ -377,3 +377,16 @@ resource "azurerm_application_gateway" "agw" {
   }
 }
 
+resource "azurerm_management_lock" "pipa_lock" {
+  depends_on = [azurerm_application_gateway.agw]
+  count      = var.lock_resource ? 1 : 0
+
+  name       = "CanNotDelete"
+  scope      = azurerm_application_gateway.agw.id
+  lock_level = "CanNotDelete"
+  notes      = "Terraform: This prevents accidental deletion of this resource."
+
+  lifecycle {
+    ignore_changes = [name, notes]
+  }
+}

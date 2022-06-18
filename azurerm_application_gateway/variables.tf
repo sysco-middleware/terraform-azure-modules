@@ -5,6 +5,11 @@ terraform {
 }
 
 variable "name" {}
+variable "lock_resource" {
+  type        = bool
+  description = "Adds lock level CanNotDelete to the resource"
+  default     = false
+}
 variable "rg_name" {}
 variable "kv_id" {
   type        = string
