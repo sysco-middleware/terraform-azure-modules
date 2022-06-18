@@ -17,7 +17,7 @@ resource "azurerm_role_assignment" "kv_rbac" {
 
   scope                = var.kv_id
   role_definition_name = local.kv_rbac_roles[count.index]
-  principal_id         = azurerm_user_assigned_identity.uai.principal_id
+  principal_id         = azurerm_user_assigned_identity.uai[0].principal_id
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_gateway
