@@ -317,7 +317,7 @@ resource "azurerm_application_gateway" "agw" {
 
   ssl_policy {
     policy_name          = local.ssl_policy_name
-    policy_type          = var.ssl_policy.type
+    policy_type          = var.ssl_policy.policy_type
     disabled_protocols   = local.ssl_disabled_protocols
     min_protocol_version = var.ssl_policy.min_tls_version
     cipher_suites        = var.ssl_policy.cipher_suites
