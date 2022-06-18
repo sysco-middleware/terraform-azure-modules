@@ -13,7 +13,7 @@ variable "lock_resource" {
 variable "rg_name" {}
 variable "kv_id" {
   type        = string
-  description = ""
+  description = "The Key Vault where the SSL Certificate is located"
   default     = null
 }
 

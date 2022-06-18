@@ -11,10 +11,19 @@ resource "azurerm_user_assigned_identity" "uai" {
   }
 }
 
+resource "azurerm_role_assignment" "kv_rbac" {
+  depends_on = [azurerm_user_assigned_identity.uai]
+  count      = length(local.kv_rbac_roles)
+
+  scope                = var.kv_id
+  role_definition_name = local.kv_rbac_roles[count.index]
+  principal_id         = azurerm_user_assigned_identity.uai.principal_id
+}
+
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/application_gateway
 # https://docs.microsoft.com/en-us/azure/developer/terraform/deploy-application-gateway-v2?toc=%2Fazure%2Fapplication-gateway%2Ftoc.json&bc=%2Fazure%2Fapplication-gateway%2Fbreadcrumb%2Ftoc.json
 resource "azurerm_application_gateway" "agw" {
-  depends_on = [azurerm_user_assigned_identity.uai]
+  depends_on = [azurerm_role_assignment.kv_rbac]
 
   name                = var.name
   resource_group_name = data.azurerm_resource_group.rg.name
