@@ -32,7 +32,11 @@ resource "azurerm_management_lock" "rg_lock" {
   name       = "CanNotDelete"
   scope      = azurerm_resource_group.rg.id
   lock_level = "CanNotDelete"
-  notes      = "Terraform: This prevents accidental deletion of this resource. and sub resources"
+  notes      = "Terraform: This prevents accidental deletion of this resource and sub resources."
+
+  lifecycle {
+    ignore_changes = [name, notes]
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////

@@ -128,6 +128,10 @@ resource "azurerm_management_lock" "vm_lock" {
   name       = "CanNotDelete"
   scope      = azurerm_windows_virtual_machine.wvm.id
   lock_level = "CanNotDelete"
-  notes      = "Terraform: This prevents accidental deletion on this resource"
+  notes      = "Terraform: This prevents accidental deletion on this resource."
+
+  lifecycle {
+    ignore_changes = [name, notes]
+  }
 }
 

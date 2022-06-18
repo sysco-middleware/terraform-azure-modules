@@ -18,7 +18,7 @@ resource "azurerm_public_ip" "pipa" {
   tags                    = var.tags
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location, zones]
+    ignore_changes = [tags, location, zones, public_ip_prefix_id]
   }
 }
 
@@ -30,4 +30,8 @@ resource "azurerm_management_lock" "pipa_lock" {
   scope      = azurerm_public_ip.pipa.id
   lock_level = "CanNotDelete"
   notes      = "Terraform: This prevents accidental deletion of this resource."
+
+  lifecycle {
+    ignore_changes = [name, notes]
+  }
 }

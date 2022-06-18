@@ -121,7 +121,11 @@ resource "azurerm_management_lock" "sql_lock" {
   name       = "CanNotDelete"
   scope      = azurerm_mssql_server.sql.id
   lock_level = "CanNotDelete"
-  notes      = "Terraform: This prevents accidental deletion of this resource. and subresources"
+  notes      = "Terraform: This prevents accidental deletion of this resource and sub resources."
+
+  lifecycle {
+    ignore_changes = [name, notes]
+  }
 }
 
 resource "azurerm_role_assignment" "sql_identity_on_sa" {

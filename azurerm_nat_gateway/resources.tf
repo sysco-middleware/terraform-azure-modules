@@ -62,6 +62,10 @@ resource "azurerm_management_lock" "natg_lock" {
   scope      = azurerm_nat_gateway.natg.id
   lock_level = "CanNotDelete"
   notes      = "Terraform: This prevents accidental deletion of this resource."
+
+  lifecycle {
+    ignore_changes = [name, notes]
+  }
 }
 
 

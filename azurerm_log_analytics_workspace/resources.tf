@@ -30,6 +30,10 @@ resource "azurerm_management_lock" "law_lock" {
   scope      = azurerm_log_analytics_workspace.law.id
   lock_level = "CanNotDelete"
   notes      = "Terraform: This prevents accidental deletion of this resource."
+
+  lifecycle {
+    ignore_changes = [name, notes]
+  }
 }
 
 

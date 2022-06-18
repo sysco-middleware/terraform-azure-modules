@@ -335,7 +335,7 @@ variable "ssl_certificates" {
   }))
   description = "(Optional) One or more ssl_certificate"
   default = []
-  sensitive = true
+  #sensitive = true # BUG! Can't defined sensitive. Causes for_each in resources to fail
 }
 
 variable "waf" {
