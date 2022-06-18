@@ -324,7 +324,7 @@ resource "azurerm_application_gateway" "agw" {
   }
 
   dynamic "ssl_certificate" {
-    for_each = var.ssl_certificate.data != null ? var.ssl_certificate : {}
+    for_each = var.ssl_certificates.name != null ? var.ssl_certificate : {}
     iterator = each
 
     content {
