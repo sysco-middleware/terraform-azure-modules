@@ -23,5 +23,5 @@ resource "azurerm_management_lock" "pipp_lock" {
   name       = "CanNotDelete"
   scope      = azurerm_public_ip_prefix.pipp.id
   lock_level = "CanNotDelete"
-  notes      = "Terraform: This prevents accidental deletion if this resource"
+  notes      = "Terraform: This prevents accidental deletion of this resource."
 }

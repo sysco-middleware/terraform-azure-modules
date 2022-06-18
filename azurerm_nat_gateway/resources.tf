@@ -61,7 +61,7 @@ resource "azurerm_management_lock" "natg_lock" {
   name       = "CanNotDelete"
   scope      = azurerm_nat_gateway.natg.id
   lock_level = "CanNotDelete"
-  notes      = "Terraform: This prevents accidental deletion if this resource"
+  notes      = "Terraform: This prevents accidental deletion of this resource."
 }
 
 

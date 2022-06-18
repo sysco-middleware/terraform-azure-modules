@@ -181,5 +181,5 @@ resource "azurerm_management_lock" "sbns_lock" {
   name       = "CanNotDelete"
   scope      = azurerm_servicebus_namespace.sbns.id
   lock_level = "CanNotDelete"
-  notes      = "Terraform: This prevents accidental deletion if this resource"
+  notes      = "Terraform: This prevents accidental deletion of this resource."
 }

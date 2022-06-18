@@ -6,4 +6,5 @@
 
 #### Issues
 
+Application settings are reset for windows_function_app
 * https://github.com/hashicorp/terraform-provider-azurerm/issues/17175

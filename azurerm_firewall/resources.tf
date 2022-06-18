@@ -40,5 +40,5 @@ resource "azurerm_management_lock" "fw_lock" {
   name       = "CanNotDelete"
   scope      = azurerm_firewall.fw.id
   lock_level = "CanNotDelete"
-  notes      = "Terraform: This prevents accidental deletion if this resource"
+  notes      = "Terraform: This prevents accidental deletion of this resource."
 }

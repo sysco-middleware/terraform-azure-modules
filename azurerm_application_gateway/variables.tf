@@ -301,7 +301,7 @@ variable "probes" {
     phnfbts             = optional(bool)   # (Optional) Whether the host header should be picked from the backend HTTP settings. Defaults to false.
     match = optional(object({
       status_code = list(string) # (Required) A list of allowed status codes for this Health Probe.
-      body        = string # (Required) A snippet from the Response Body which must be present in the Response.
+      body        = string       # (Required) A snippet from the Response Body which must be present in the Response.
     }))
   }))
   description = ""

@@ -33,5 +33,5 @@ resource "azurerm_management_lock" "kv_lock" {
   name       = "CanNotDelete"
   scope      = azurerm_bastion_host.bas.id
   lock_level = "CanNotDelete"
-  notes      = "Terraform: This prevents accidental deletion if this resource"
+  notes      = "Terraform: This prevents accidental deletion of this resource."
 }

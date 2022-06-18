@@ -3,6 +3,9 @@
 ### Module resources
 ---
 
+* https://docs.microsoft.com/en-us/azure/azure-functions/functions-premium-plan?tabs=azurecli#features
+
+
 ### Module info
 ---
 

@@ -107,5 +107,5 @@ resource "azurerm_management_lock" "law_lock" {
   name       = "CanNotDelete"
   scope      = azurerm_api_management.apim.id
   lock_level = "CanNotDelete"
-  notes      = "Terraform: This prevents accidental deletion if this resource"
+  notes      = "Terraform: This prevents accidental deletion of this resource."
 }
