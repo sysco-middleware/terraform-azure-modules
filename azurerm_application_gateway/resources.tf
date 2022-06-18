@@ -1,6 +1,6 @@
 resource "azurerm_user_assigned_identity" "uai" {
   depends_on = [data.azurerm_resource_group.rg]
-  count      = local.is_sku_tier_v2 ? 1 : 0
+  count      = local.uai_install ? 1 : 0
 
   name                = local.uai_name
   resource_group_name = data.azurerm_resource_group.rg.name
@@ -37,7 +37,7 @@ resource "azurerm_application_gateway" "agw" {
 
     content {
       type         = "UserAssigned" # (Optional) The Managed Service Identity Type of this Application Gateway. The only possible value is UserAssigned. Defaults to UserAssigned
-      identity_ids = concat([azurerm_user_assigned_identity.uai[0].id], var.managed_identity_ids)
+      identity_ids = local.uai_install ? concat([azurerm_user_assigned_identity.uai[0].id], var.managed_identity_ids) : var.managed_identity_ids
     }
   }
 

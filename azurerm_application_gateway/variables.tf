@@ -16,6 +16,13 @@ variable "kv_id" {
   description = ""
   default     = null
 }
+
+variable "uai_name" {
+  type        = string
+  description = "(Option/Required) User Assigned/Managed Identity. If ommitted, and tier v2 then an {var.name}-uia is installed."
+  default     = null
+}
+
 variable "tier" {
   type        = string
   description = "(Required) The Tier of the SKU to use for this Application Gateway. Possible values are Standard, Standard_v2, WAF and WAF_v2."
