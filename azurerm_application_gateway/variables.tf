@@ -310,19 +310,19 @@ variable "probes" {
 
 variable "ssl_policy" {
   type = object({
-    name            = string       # (Optional) The Name of the Policy e.g AppGwSslPolicy20170401S. Required if policy_type is set to Predefined. Possible values can change over time and are published here https://docs.microsoft.com/azure/application-gateway/application-gateway-ssl-policy-overview. Not compatible with disabled_protocols.
-    type            = string       # (Optional) The Type of the Policy. Possible values are Predefined and Custom.
-    cipher_suites   = list(string) # (Optional) A List of accepted cipher suites. Possible values are:
-    disabled_tls    = list(string) # (Optional) A list of SSL Protocols which should be disabled on this Application Gateway. Possible values are TLSv1_0, TLSv1_1 and TLSv1_2
-    min_tls_version = string       # (Optional) The minimal TLS version. Possible values are TLSv1_0, TLSv1_1 and TLSv1_2.
+    policy_name        = string       # (Optional) The Name of the Policy e.g AppGwSslPolicy20170401S. Required if policy_type is set to Predefined. Possible values can change over time and are published here https://docs.microsoft.com/azure/application-gateway/application-gateway-ssl-policy-overview. Not compatible with disabled_protocols.
+    policy_type        = string       # (Optional) The Type of the Policy. Possible values are Predefined and Custom.
+    cipher_suites      = list(string) # (Optional) A List of accepted cipher suites. Possible values are:
+    disabled_protocols = list(string) # (Optional) A list of SSL Protocols which should be disabled on this Application Gateway. Possible values are TLSv1_0, TLSv1_1 and TLSv1_2
+    min_tls_version    = string       # (Optional) The minimal TLS version. Possible values are TLSv1_0, TLSv1_1 and TLSv1_2.
   })
   description = "SSL Policy and Cipher suites for SSL Listerners"
   default = {
-    name            = null
-    type            = "Custom"
-    disabled_tls    = ["TLSv1_0", "TLSv1_1"]
-    min_tls_version = "TLSv1_2"
-    cipher_suites   = [
+    policy_name        = null
+    policy_type        = "Custom"
+    disabled_protocols = ["TLSv1_0", "TLSv1_1"]
+    min_tls_version    = "TLSv1_2"
+    cipher_suites = [
       "TLS_RSA_WITH_AES_256_CBC_SHA256",
       "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
       "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
@@ -343,7 +343,7 @@ variable "ssl_policy" {
       "TLS_RSA_WITH_AES_128_CBC_SHA",
       "TLS_RSA_WITH_AES_256_CBC_SHA"
     ]
-  
+
   }
 }
 
