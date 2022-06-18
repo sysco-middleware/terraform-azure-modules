@@ -326,17 +326,15 @@ variable "ssl_policy" {
   }
 }
 
-variable "ssl_certificate" {
-  type = object({
+variable "ssl_certificates" {
+  type = list(object({
     name         = string           # (Required) The Name of the SSL certificate that is unique within this Application Gateway
     data         = optional(string) # (Optional) PFX certificate. Required if key_vault_secret_id is not set.
     password     = optional(string) # (Optional) Password for the pfx file specified in data. Required if data is set.
     kv_secret_id = optional(string) # (Optional) Secret Id of (base-64 encoded unencrypted pfx) Secret or Certificate object stored in Azure KeyVault. You need to enable soft delete for keyvault to use this feature. Required if data is not set
-  })
-  description = ""
-  default = {
-    name = null
-  }
+  }))
+  description = "(Optional) One or more ssl_certificate"
+  default = []
   sensitive = true
 }
 
