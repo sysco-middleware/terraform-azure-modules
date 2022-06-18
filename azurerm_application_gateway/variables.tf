@@ -215,7 +215,7 @@ variable "http_listeners" {
     host_names       = optional(list(string)) # (Optional) The host_names and host_name are mutually exclusive and cannot both be set. A list of Hostname(s) should be used for this HTTP Listener. It allows special wildcard characters.
     protocol         = string                 # (Required) The Protocol to use for this HTTP Listener. Possible values are Http and Https. Https requires Ssl Certificate must be specified
     require_sni      = optional(bool)         # (Optional) Should Server Name Indication be Required? Defaults to false.
-    ssl_cert_name    = optional(string)       # (Optional) The name of the associated SSL Certificate which should be used for this HTTP Listener.
+    ssl_cert_name    = optional(string)       # (Optional/required) Required if protocol is https. The name of the associated SSL Certificate which should be used for this HTTP Listener.
     ssl_profile_name = optional(string)       # (Optional) The name of the associated SSL Profile which should be used for this HTTP Listener.
     fw_policy_id     = optional(string)       # (Optional) The ID of the Web Application Firewall Policy which should be used for this HTTP Listener.
 
@@ -310,19 +310,40 @@ variable "probes" {
 
 variable "ssl_policy" {
   type = object({
-    name            = string       # (Required) The name of the Frontend Port.
-    type            = number       # (Required) The port used for this Frontend Port.
+    name            = string       # (Optional) The Name of the Policy e.g AppGwSslPolicy20170401S. Required if policy_type is set to Predefined. Possible values can change over time and are published here https://docs.microsoft.com/azure/application-gateway/application-gateway-ssl-policy-overview. Not compatible with disabled_protocols.
+    type            = string       # (Optional) The Type of the Policy. Possible values are Predefined and Custom.
     cipher_suites   = list(string) # (Optional) A List of accepted cipher suites. Possible values are:
     disabled_tls    = list(string) # (Optional) A list of SSL Protocols which should be disabled on this Application Gateway. Possible values are TLSv1_0, TLSv1_1 and TLSv1_2
     min_tls_version = string       # (Optional) The minimal TLS version. Possible values are TLSv1_0, TLSv1_1 and TLSv1_2.
   })
-  description = ""
+  description = "SSL Policy and Cipher suites for SSL Listerners"
   default = {
     name            = null
-    type            = null
+    type            = "Custom"
     disabled_tls    = ["TLSv1_0", "TLSv1_1"]
     min_tls_version = "TLSv1_2"
-    cipher_suites   = ["TLS_RSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA", "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384", "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA", "TLS_RSA_WITH_AES_256_GCM_SHA384", "TLS_RSA_WITH_AES_256_CBC_SHA256", "TLS_RSA_WITH_AES_256_CBC_SHA"]
+    cipher_suites   = [
+      "TLS_RSA_WITH_AES_256_CBC_SHA256",
+      "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
+      "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+      "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
+      "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
+      "TLS_RSA_WITH_AES_128_GCM_SHA256",
+      "TLS_RSA_WITH_AES_128_CBC_SHA256",
+      "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+      "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+      "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
+      "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA",
+      "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
+      "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384",
+      "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+      "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
+      "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+      "TLS_RSA_WITH_AES_256_GCM_SHA384",
+      "TLS_RSA_WITH_AES_128_CBC_SHA",
+      "TLS_RSA_WITH_AES_256_CBC_SHA"
+    ]
+  
   }
 }
 
@@ -334,7 +355,7 @@ variable "ssl_certificates" {
     kv_secret_id = optional(string) # (Optional) Secret Id of (base-64 encoded unencrypted pfx) Secret or Certificate object stored in Azure KeyVault. You need to enable soft delete for keyvault to use this feature. Required if data is not set
   }))
   description = "(Optional) One or more ssl_certificate"
-  default = []
+  default     = []
   #sensitive = true # BUG! Can't defined sensitive. Causes for_each in resources to fail
 }
 

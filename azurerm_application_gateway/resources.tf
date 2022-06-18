@@ -154,6 +154,35 @@ resource "azurerm_application_gateway" "agw" {
     }
   }
 
+  dynamic "http_listener" {
+    for_each = length(var.http_listeners) > 0 ? var.http_listeners : []
+    iterator = each
+
+    content {
+      name                           = each.value.name
+      frontend_ip_configuration_name = each.value.fe_ip_conf_name
+      frontend_port_name             = each.value.fe_port_name
+      protocol                       = each.value.protocol
+      host_name                      = each.value.host_name
+      host_names                     = each.value.host_name == null ? each.value.host_names : null
+      require_sni                    = each.value.require_sni
+      ssl_certificate_name           = each.value.ssl_cert_name
+      ssl_profile_name               = each.value.ssl_profile_name
+      firewall_policy_id             = each.value.fw_policy_id
+      # require_sni - (Optional) Should Server Name Indication be Required? Defaults to false.
+
+      dynamic "custom_error_configuration" {
+        for_each = length(each.value.custom_errors) > 0 ? each.value.custom_errors : []
+        iterator = eachsub
+
+        content {
+          status_code           = eachsub.value.status_code
+          custom_error_page_url = eachsub.value.page_url
+        }
+      }
+    }
+  }
+
   dynamic "rewrite_rule_set" {
     for_each = length(var.rewrite_rule_sets) > 0 ? var.rewrite_rule_sets : []
     iterator = each
@@ -206,35 +235,6 @@ resource "azurerm_application_gateway" "agw" {
             query_string = eachsub.value.url.query_string
             reroute      = eachsub.value.url.reroute
           }
-        }
-      }
-    }
-  }
-
-  dynamic "http_listener" {
-    for_each = length(var.http_listeners) > 0 ? var.http_listeners : []
-    iterator = each
-
-    content {
-      name                           = each.value.name
-      frontend_ip_configuration_name = each.value.fe_ip_conf_name
-      frontend_port_name             = each.value.fe_port_name
-      protocol                       = each.value.protocol
-      host_name                      = each.value.host_name
-      host_names                     = each.value.host_name == null ? each.value.host_names : null
-      require_sni                    = each.value.require_sni
-      ssl_certificate_name           = each.value.ssl_cert_name
-      ssl_profile_name               = each.value.ssl_profile_name
-      firewall_policy_id             = each.value.fw_policy_id
-      # require_sni - (Optional) Should Server Name Indication be Required? Defaults to false.
-
-      dynamic "custom_error_configuration" {
-        for_each = length(each.value.custom_errors) > 0 ? each.value.custom_errors : []
-        iterator = eachsub
-
-        content {
-          status_code           = eachsub.value.status_code
-          custom_error_page_url = eachsub.value.page_url
         }
       }
     }
