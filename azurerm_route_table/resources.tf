@@ -29,4 +29,8 @@ resource "azurerm_subnet_route_table_association" "srta" {
 
   subnet_id      = var.subnet_ids[count.index]
   route_table_id = azurerm_route_table.rt.id
+
+  lifecycle {
+    ignore_changes = [tags, subnet_id]
+  }
 }
