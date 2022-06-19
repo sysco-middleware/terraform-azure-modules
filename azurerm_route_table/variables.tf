@@ -21,6 +21,12 @@ variable "routes" {
   }
 }
 
+variable "subnet_ids" {
+  type        = list(string)
+  description = "(Required/Optional) A list of Subnet IDs the Route Table which should be associated with. Changing this forces a new resource to be created."
+  default     = []
+}
+
 variable "tags" {
   type        = map(any)
   description = "A mapping of tags to assign to the resource."
