@@ -194,7 +194,7 @@ variable "backend_http_settings" {
     name                  = string           # (Required) The name of the Backend Address Pool.
     cookie_based_affinity = string           # (Required) Is Cookie-Based Affinity enabled? Possible values are Enabled and Disabled.
     affinity_cookie_name  = optional(string) # (Optional) The name of the affinity cookie.
-    path                  = string           # (Optional) The Path which should be used as a prefix for all HTTP requests.
+    path                  = string           # (Optional) The Path which should be used as a prefix for all HTTP requests. IMPORTANT: Path must end with slash "/" if not a file or else Proble will fail with HTTP 404
     port                  = number           # (Required) The port which should be used for this Backend HTTP Settings Collection.
     probe_name            = optional(string) # (Optional) The name of an associated HTTP Probe.
     protocol              = string           # (Required) The Protocol which should be used. Possible values are Http and Https.
