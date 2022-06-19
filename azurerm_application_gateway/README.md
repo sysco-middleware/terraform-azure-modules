@@ -10,6 +10,8 @@ https://msrc-blog.microsoft.com/2021/12/11/microsofts-response-to-cve-2021-44228
 
 ##### PROBLEM
 
+https://docs.microsoft.com/en-us/azure/application-gateway/configuration-infrastructure#supported-user-defined-routes
+
 ##### SOLUTION
 
 https://github.com/hashicorp/terraform-provider-azurerm/issues/5497

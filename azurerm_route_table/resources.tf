@@ -2,8 +2,8 @@ resource "azurerm_route_table" "rt" {
   depends_on = [data.azurerm_resource_group.rg]
 
   name                          = var.name
-  location                      = data.azurerm_resource_group.example.location
-  resource_group_name           = data.azurerm_resource_group.example.name
+  location                      = data.azurerm_resource_group.rg.location
+  resource_group_name           = data.azurerm_resource_group.rg.name
   disable_bgp_route_propagation = var.disable_propagation
 
   dynamic "route" {
@@ -25,11 +25,8 @@ resource "azurerm_route_table" "rt" {
 
 resource "azurerm_subnet_route_table_association" "srta" {
   depends_on = [azurerm_route_table.rt]
-  for_each   = var.subnet_ids
-  iterator   = each
+  count      = length(var.subnet_ids)
 
-  content {
-    subnet_id      = each.key
-    route_table_id = azurerm_route_table.rt.id
-  }
+  subnet_id      = var.subnet_ids[count.index]
+  route_table_id = azurerm_route_table.rt.id
 }
