@@ -7,7 +7,7 @@ resource "azurerm_network_watcher" "nw" {
   tags                = var.tags
 
   lifecycle {
-    ignore_changes = [tags, location]
+    ignore_changes = [tags]
   }
 }
 
