@@ -2,7 +2,7 @@ resource "azurerm_user_assigned_identity" "uai" {
   depends_on = [data.azurerm_resource_group.rg]
   count      = local.uai_install ? 1 : 0
 
-  name                = local.uai_name
+  name                = "${var.name}-uai"
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
 
@@ -46,7 +46,7 @@ resource "azurerm_application_gateway" "agw" {
 
     content {
       type         = "UserAssigned" # (Optional) The Managed Service Identity Type of this Application Gateway. The only possible value is UserAssigned. Defaults to UserAssigned
-      identity_ids = local.uai_install ? concat([azurerm_user_assigned_identity.uai[0].id], var.managed_identity_ids) : var.managed_identity_ids
+      identity_ids = concat([local.uai_id], var.managed_identity_ids)
     }
   }
 
@@ -338,7 +338,7 @@ resource "azurerm_application_gateway" "agw" {
 
     content {
       name                = each.value.name
-      data                = each.value.data
+      data                = base64encode(each.value.data) # The PFX file
       password            = each.value.password
       key_vault_secret_id = each.value.kv_secret_id
     }
@@ -384,6 +384,23 @@ resource "azurerm_application_gateway" "agw" {
   lifecycle {
     ignore_changes = [tags, location]
   }
+  /*
+  // Ignore most changes as they will be managed manually
+  lifecycle {
+    ignore_changes = [
+      backend_address_pool,
+      backend_http_settings,
+      frontend_port,
+      http_listener,
+      probe,
+      request_routing_rule,
+      url_path_map,
+      ssl_certificate,
+      redirect_configuration,
+      autoscale_configuration
+    ]
+  }
+  */
 }
 
 resource "azurerm_management_lock" "pipa_lock" {
