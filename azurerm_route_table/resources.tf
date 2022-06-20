@@ -5,6 +5,7 @@ resource "azurerm_route_table" "rt" {
   location                      = data.azurerm_resource_group.rg.location
   resource_group_name           = data.azurerm_resource_group.rg.name
   disable_bgp_route_propagation = var.disable_propagation
+  tags                          = var.tags
 
   dynamic "route" {
     for_each = length(var.routes) > 0 ? var.routes : []
@@ -31,6 +32,6 @@ resource "azurerm_subnet_route_table_association" "srta" {
   route_table_id = azurerm_route_table.rt.id
 
   lifecycle {
-    ignore_changes = [tags, subnet_id]
+    ignore_changes = [subnet_id]
   }
 }
