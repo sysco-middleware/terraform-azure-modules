@@ -12,7 +12,7 @@ resource "azurerm_public_ip_prefix" "pipp" {
   tags                = var.tags
 
   lifecycle {
-    ignore_changes = [tags, location, ip_version, zones]
+    ignore_changes = [tags, location, ip_version]
   }
 }
 

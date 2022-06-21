@@ -32,15 +32,10 @@ variable "sku" {
     error_message = "Variable 'sku' must be Standard."
   }
 }
-variable "zones" {
+variable "avail_zones" {
   type        = list(number)
   description = "(Optional) Specifies a list of Availability Zones in which this Public IP Prefix should be located. Changing this forces a new Public IP Prefix to be created."
   default     = [1]
-}
-variable "availability_zone" {
-  type        = string
-  description = "(Optional) The availability zone to allocate the Public IP in. Possible values are Zone-Redundant, 1, 2, 3, and No-Zone. Defaults to Zone-Redundant."
-  default     = "Zone-Redundant"
 }
 variable "tags" {
   type        = map(any)
