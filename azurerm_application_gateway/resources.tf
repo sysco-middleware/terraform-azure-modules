@@ -338,7 +338,7 @@ resource "azurerm_application_gateway" "agw" {
 
     content {
       name                = each.value.name
-      data                = base64encode(each.value.data) # The PFX file
+      data                = each.value.data
       password            = each.value.password
       key_vault_secret_id = each.value.kv_secret_id
     }

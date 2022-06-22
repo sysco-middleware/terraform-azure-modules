@@ -117,6 +117,7 @@ resource "null_resource" "route_all_win_fa" {
   }
 }
 
+/* Not needed anymore
 resource "null_resource" "route_all_lin_fa" {
   depends_on = [azurerm_app_service_virtual_network_swift_connection.asvnsc_lin_fa]
   count      = length(local.asvnsc_lin_apps_fa)
@@ -135,3 +136,5 @@ resource "null_resource" "route_all_lin_fa" {
     on_failure  = continue
   }
 }
+
+*/

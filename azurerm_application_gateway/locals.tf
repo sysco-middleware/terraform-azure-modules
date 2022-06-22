@@ -6,5 +6,5 @@ locals {
   is_sku_tier_v2         = can(regex("Standard_v2|WAF_v2", var.tier)) ? true : false
   is_waf                 = can(regex("WAF", var.tier)) ? true : false
   kv_rbac_roles          = local.uai_install && var.kv_id != null ? ["Key Vault Secrets User"] : []
-  uai_id = local.uai_install ? azurerm_user_assigned_identity.uai[0].id : var.uai_id
+  uai_id                 = local.uai_install ? azurerm_user_assigned_identity.uai[0].id : var.uai_id
 }
