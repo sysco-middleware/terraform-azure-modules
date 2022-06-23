@@ -1,5 +1,5 @@
 # https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/app_role_assignment
-resource "azuread_application" "example" {
+resource "azuread_application" "app" {
   display_name    = var.name
   identifier_uris = var.identifier_uris
   device_only_auth_enabled = var.device_only
