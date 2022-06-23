@@ -2,6 +2,9 @@
 resource "azuread_application" "example" {
   display_name    = var.name
   identifier_uris = var.identifier_uris
+  device_only_auth_enabled = var.device_only
+  fallback_public_client_enabled = var.public_client_enabled
+  group_membership_claims = var.group_membership_claims
 
   # TODO: optional_claims {}
 

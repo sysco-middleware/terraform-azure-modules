@@ -1,14 +1,40 @@
-variable "display_name" {}
+variable "display_name" {
+    description = "Required) The display name for the application."
+}
 variable "description" {
   type        = string
   description = "(Optional) A description of the service principal provided for internal end-users."
   default     = ""
 }
+
+variable "public_client_enabled" {
+    type = bool 
+    description = "(Optional) Specifies whether the fallback application is a public client. Appropriate for apps using token grant flows that don't use a redirect URI. Defaults to false."
+    default = false
+}
+
 variable "identifier_uris" {
   type        = list(string)
   description = ""
   default     = []
 }
+
+variable "device_only" {
+    type = bool
+    description = "(Optional) Specifies whether this application supports device authentication without a user. Defaults to false."
+    default = false
+}
+
+variable "group_membership_claims" {
+    type = bool
+    description = "(Optional) Configures the groups claim issued in a user or OAuth 2.0 access token that the app expects. Possible values are None, SecurityGroup, DirectoryRole, ApplicationGroup or All."
+    default = "None"
+    validation {
+    condition     = can(regex("None|SecurityGroup|DirectoryRole|ApplicationGroup|All", var.preferred_sso_mode)) || var.preferred_sso_mode == null
+    error_message = "The variable 'preferred_sso_mode' must be one of: oidc|password|saml|notSupported"
+  }
+}
+
 
 variable "api" {
   type = object({
@@ -25,7 +51,7 @@ variable "api" {
       uc_display_name = string
     }))
   })
-  description = ""
+  description = "(Optional) An api block which configures API related settings for this application."
   default = {
     claims_enabled       = true
     access_token_version = 2
@@ -43,7 +69,7 @@ variable "app_roles" {
     id            = string
     value         = string
   }))
-  description = ""
+  description = "(Optional) A collection of app_role blocks For more information see https://docs.microsoft.com/en-us/azure/architecture/multitenant-identity/app-roles on Application Roles."
   default     = []
 }
 

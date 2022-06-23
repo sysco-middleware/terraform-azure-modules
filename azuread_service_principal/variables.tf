@@ -77,13 +77,6 @@ variable "use_existing" {
   default     = true
 }
 
-variable "" {
-  type        = string
-  description = ""
-  default     = ""
-}
-
-
 variable "alternative_names" {
   type        = string
   description = "(Optional) A set of alternative names, used to retrieve service principals by subscription, identify resource group and full resource ids for managed identities."
