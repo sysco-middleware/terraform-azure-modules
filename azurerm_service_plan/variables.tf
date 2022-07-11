@@ -35,19 +35,19 @@ variable "app_service_environment_id" {
 variable "worker_count" {
   type        = number
   description = "(Optional) The number of Workers (instances) to be allocated. The value must be at least 4."
-  default     = 4
+  default     = 2
   validation {
-    condition     = var.worker_count >= 4
+    condition     = var.worker_count >= 2
     error_message = "Variable 'worker_count' must be 3 or higher than maximum_elastic_worker_count."
   }
 }
 variable "maximum_elastic_worker_count" {
   type        = number
   description = "(Optional) The maximum number of workers to use in an Elastic SKU Plan. Cannot be set unless using an Elastic SKU. The value must beat least 1 and less than NumberOfWorkers"
-  default     = 2
+  default     = 4
   validation {
-    condition     = var.maximum_elastic_worker_count <= 3
-    error_message = "Variable 'maximum_elastic_worker_count' must be 3 and lower that worker_count."
+    condition     = var.maximum_elastic_worker_count >= 2
+    error_message = "Variable 'maximum_elastic_worker_count' must be 2 or higher and higher that worker_count."
   }
 }
 

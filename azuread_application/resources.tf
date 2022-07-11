@@ -52,6 +52,10 @@ resource "azuread_application" "app" {
     # hide - (Optional) Whether this app is invisible to users in My Apps and Office 365 Launcher. Enabling this will assign the HideApp tag. Defaults to false.
   }
 
+  single_page_application {
+    redirect_uris = toset(var.redirect_uris)
+  }
+
   dynamic "required_resource_access" {
     for_each = length(var.required_accesses) > 0 ? var.required_accesses : []
     iterator = each
@@ -60,7 +64,7 @@ resource "azuread_application" "app" {
       resource_app_id = each.value.resource_app_id
 
       dynamic "resource_access" {
-        for_each = length(each.value.resources) > 0 ? each.value.resources : []
+        for_each = length(each.value.resource_access) > 0 ? each.value.resource_access : []
         iterator = eachsub
 
         content {

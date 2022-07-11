@@ -21,7 +21,7 @@ resource "azuread_service_principal" "sp" {
   notification_email_addresses  = var.notifications
   preferred_single_sign_on_mode = var.preferred_sso_mode
   use_existing                  = var.use_existing
-  alternative_names             = set(var.alternative_names)
+  alternative_names             = toset(var.alternative_names)
 
   feature_tags {
     enterprise = var.is_enterprise
